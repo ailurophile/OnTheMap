@@ -21,13 +21,23 @@ extension UdacityClient {
     
     struct Methods{
         static let Logout = "DELETE"
-        static let GetSessionID = "POST"
+        static let Login = "POST"
     }
+    //MARK: Parameters
     
     struct Parameters{
         static let Dictionary = "udacity"
         static let UserName = "username"
         static let Password = "password"
+    }
+    
+    //MARK: JSON Response Keys
+    struct JSONResponseKeys{
+        static let Account = "account"
+        static let ValidFlag = "registered"
+        static let Expiration = "expiration"
+        static let Session = "session"
+        static let ID = "id"
     }
 
     

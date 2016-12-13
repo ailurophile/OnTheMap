@@ -82,7 +82,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         print("Login pressed with email: \(email) and password: \(password)")
         if(verifyFields() == true){
             //login to Udacity
-            UdacityClient.sharedInstance().login()
+            UdacityClient.sharedInstance().login(self, email:email, password: password)
         }
     }
     //MARK: Helper functions
