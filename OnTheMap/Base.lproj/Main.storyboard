@@ -120,43 +120,67 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="udacity" translatesAutoresizingMaskIntoConstraints="NO" id="8l1-2f-Uul">
-                                <rect key="frame" x="121" y="40" width="132" height="110"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Login to Udacity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="078-tp-JnX">
-                                <rect key="frame" x="124" y="158" width="152" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login to Udacity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="078-tp-JnX">
+                                <rect key="frame" x="118" y="304" width="139" height="23"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" alpha="0.80000001192092896" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Email" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZGk-dy-fMU">
-                                <rect key="frame" x="22" y="235" width="337" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" clipsSubviews="YES" alpha="0.80000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZGk-dy-fMU">
+                                <rect key="frame" x="20" y="383" width="335" height="30"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ifW-g8-Qkw" id="Z0O-4N-3aA"/>
+                                </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" alpha="0.80000001192092896" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Password" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNV-ZV-oEC">
-                                <rect key="frame" x="22" y="283" width="337" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" clipsSubviews="YES" alpha="0.80000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNV-ZV-oEC">
+                                <rect key="frame" x="20" y="431" width="335" height="30"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ifW-g8-Qkw" id="RS9-lW-2MW"/>
+                                </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wEu-I1-z9f">
-                                <rect key="frame" x="31" y="345" width="328" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wEu-I1-z9f">
+                                <rect key="frame" x="20" y="493" width="335" height="30"/>
                                 <color key="backgroundColor" red="1" green="0.29547323650000001" blue="0.48270587259999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Login">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="loginPressed" destination="ifW-g8-Qkw" eventType="touchUpInside" id="Yzo-Ru-HzB"/>
+                                </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="udacity" translatesAutoresizingMaskIntoConstraints="NO" id="8l1-2f-Uul">
+                                <rect key="frame" x="59.5" y="40" width="256" height="256"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="078-tp-JnX" firstAttribute="centerX" secondItem="64c-16-qRY" secondAttribute="centerX" id="05b-An-V1V"/>
+                            <constraint firstItem="wEu-I1-z9f" firstAttribute="trailing" secondItem="ZGk-dy-fMU" secondAttribute="trailing" id="5My-Ax-Y15"/>
+                            <constraint firstItem="ZGk-dy-fMU" firstAttribute="top" secondItem="078-tp-JnX" secondAttribute="bottom" constant="56" id="8Xt-xb-P4p"/>
+                            <constraint firstAttribute="trailing" secondItem="ZGk-dy-fMU" secondAttribute="trailing" constant="20" id="8kQ-6c-X23"/>
+                            <constraint firstItem="wEu-I1-z9f" firstAttribute="top" secondItem="ZNV-ZV-oEC" secondAttribute="bottom" constant="32" id="Ap3-h8-uu6"/>
+                            <constraint firstItem="wEu-I1-z9f" firstAttribute="leading" secondItem="ZGk-dy-fMU" secondAttribute="leading" id="Hh7-Me-2pk"/>
+                            <constraint firstItem="ZNV-ZV-oEC" firstAttribute="leading" secondItem="ZGk-dy-fMU" secondAttribute="leading" id="Li4-ft-BRC"/>
+                            <constraint firstItem="8l1-2f-Uul" firstAttribute="top" secondItem="t3u-aZ-lJ2" secondAttribute="bottom" constant="20" id="RGr-bN-M3K"/>
+                            <constraint firstItem="ZNV-ZV-oEC" firstAttribute="trailing" secondItem="ZGk-dy-fMU" secondAttribute="trailing" id="Vos-VZ-f5f"/>
+                            <constraint firstItem="ZNV-ZV-oEC" firstAttribute="top" secondItem="ZGk-dy-fMU" secondAttribute="bottom" constant="18" id="bcC-jt-005"/>
+                            <constraint firstItem="078-tp-JnX" firstAttribute="top" secondItem="8l1-2f-Uul" secondAttribute="bottom" constant="8" id="cJ6-dk-fOE"/>
+                            <constraint firstItem="ZGk-dy-fMU" firstAttribute="leading" secondItem="64c-16-qRY" secondAttribute="leading" constant="20" id="nuv-aO-wzO"/>
+                            <constraint firstItem="8l1-2f-Uul" firstAttribute="centerX" secondItem="64c-16-qRY" secondAttribute="centerX" id="uzI-Rg-Nxv"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="emailTextField" destination="ZGk-dy-fMU" id="R8a-d8-bwa"/>
+                        <outlet property="loginButton" destination="wEu-I1-z9f" id="nrc-hM-P4R"/>
+                        <outlet property="passwordTextField" destination="ZNV-ZV-oEC" id="eiL-QT-JfB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eW7-w4-eNH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

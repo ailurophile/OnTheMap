@@ -18,6 +18,11 @@ import Foundation
     }
  */
     func login(){
+        
+    }
+    
+    
+    func loginPlayground(){
         var request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
         
         request.httpMethod = "POST"
@@ -57,6 +62,46 @@ import Foundation
             task2.resume()
   
         }
+        task.resume()
     }
+    
+    // MARK: Helpers
+    
+
+    
+    // given raw JSON, return a usable Foundation object
+    private func convertDataWithCompletionHandler(_ data: Data, completionHandlerForConvertData: (_ result: AnyObject?, _ error: NSError?) -> Void) {
+        
+        var parsedResult: AnyObject! = nil
+        do {
+            parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
+        } catch {
+            let userInfo = [NSLocalizedDescriptionKey : "Could not parse the data as JSON: '\(data)'"]
+            completionHandlerForConvertData(nil, NSError(domain: "convertDataWithCompletionHandler", code: 1, userInfo: userInfo))
+        }
+        
+        completionHandlerForConvertData(parsedResult, nil)
+    }
+    
+    // create a URL from parameters
+    private func UdacityURLFromParameters(_ parameters: [String:AnyObject]) -> URL {
+        
+        var components = URLComponents()
+        components.scheme = UdacityClient.Constants.ApiScheme
+        components.host = UdacityClient.Constants.ApiHost
+        components.path = UdacityClient.Constants.ApiPath
+                
+        return components.url!
+    }
+    
+    // MARK: Shared Instance
+    
+    class func sharedInstance() -> UdacityClient {
+        struct Singleton {
+            static var sharedInstance = UdacityClient()
+        }
+        return Singleton.sharedInstance
+    }
+
     
 }

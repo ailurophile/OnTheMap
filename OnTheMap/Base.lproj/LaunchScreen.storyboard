@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait">
+    <device id="ipad12_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -17,23 +17,56 @@
                         <viewControllerLayoutGuide type="top" id="Llm-lL-Icb"/>
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <view key="view" contentMode="scaleToFill" id="xF1-MK-Hgi">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="udacity" translatesAutoresizingMaskIntoConstraints="NO" id="Ile-8K-yus">
-                                <rect key="frame" x="121" y="40" width="132" height="110"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="On the Map" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7vD-Sa-mog">
-                                <rect key="frame" x="134" y="158" width="107" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login to Udacity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pbp-Wy-QAp">
+                                <rect key="frame" x="442.5" y="304" width="139" height="23"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" clipsSubviews="YES" alpha="0.80000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Email" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UxE-zS-iml">
+                                <rect key="frame" x="20" y="383" width="984" height="30"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" alpha="0.80000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Password" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nYu-8X-SqH">
+                                <rect key="frame" x="20" y="431" width="984" height="30"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2aR-Xa-sjs">
+                                <rect key="frame" x="20" y="493" width="984" height="30"/>
+                                <color key="backgroundColor" red="1" green="0.29547323650000001" blue="0.48270587259999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Login">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="udacity" translatesAutoresizingMaskIntoConstraints="NO" id="7Ii-vD-0po">
+                                <rect key="frame" x="384" y="40" width="256" height="256"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="2aR-Xa-sjs" firstAttribute="top" secondItem="nYu-8X-SqH" secondAttribute="bottom" constant="32" id="0JG-2j-ejF"/>
+                            <constraint firstItem="UxE-zS-iml" firstAttribute="top" secondItem="pbp-Wy-QAp" secondAttribute="bottom" constant="56" id="0j1-1x-5TP"/>
+                            <constraint firstItem="7Ii-vD-0po" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="20" id="43N-aS-Ec5"/>
+                            <constraint firstItem="pbp-Wy-QAp" firstAttribute="top" secondItem="7Ii-vD-0po" secondAttribute="bottom" constant="8" id="GF7-au-DNW"/>
+                            <constraint firstItem="nYu-8X-SqH" firstAttribute="top" secondItem="UxE-zS-iml" secondAttribute="bottom" constant="18" id="HgB-BL-Qe2"/>
+                            <constraint firstAttribute="trailing" secondItem="UxE-zS-iml" secondAttribute="trailing" constant="20" id="Qv3-0X-vN7"/>
+                            <constraint firstItem="nYu-8X-SqH" firstAttribute="leading" secondItem="UxE-zS-iml" secondAttribute="leading" id="SpK-nZ-Xcn"/>
+                            <constraint firstItem="pbp-Wy-QAp" firstAttribute="centerX" secondItem="xF1-MK-Hgi" secondAttribute="centerX" id="Vrn-Yz-ONc"/>
+                            <constraint firstItem="2aR-Xa-sjs" firstAttribute="trailing" secondItem="UxE-zS-iml" secondAttribute="trailing" id="a6E-zo-oal"/>
+                            <constraint firstItem="UxE-zS-iml" firstAttribute="leading" secondItem="xF1-MK-Hgi" secondAttribute="leading" constant="20" id="kFt-GX-vnM"/>
+                            <constraint firstItem="7Ii-vD-0po" firstAttribute="centerX" secondItem="xF1-MK-Hgi" secondAttribute="centerX" id="vbx-85-mT3"/>
+                            <constraint firstItem="2aR-Xa-sjs" firstAttribute="leading" secondItem="UxE-zS-iml" secondAttribute="leading" id="y2g-qB-g8n"/>
+                            <constraint firstItem="nYu-8X-SqH" firstAttribute="trailing" secondItem="UxE-zS-iml" secondAttribute="trailing" id="zNE-eD-2bK"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
