@@ -1,5 +1,5 @@
 //
-//  StudentLocation.swift
+//  StudentInformation.swift
 //  OnTheMap
 //
 //  Created by Lisa Litchfield on 12/6/16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct  StudentLocation {
+struct  StudentInformation {
     
     //MARK: Properties
     
@@ -23,7 +23,7 @@ struct  StudentLocation {
     
     //Mark Construction
     
-    init(dictionary: [String:AnyObject]){
+    init(_ dictionary: [String:AnyObject]){
         firstName = dictionary[ParseClient.JSONResponseKeys.FirstName] as? String ?? ParseClient.Constants.UNKNOWN
         lastName = dictionary[ParseClient.JSONResponseKeys.LastName] as? String ?? ParseClient.Constants.UNKNOWN
         longitude = dictionary[ParseClient.JSONResponseKeys.Longitude] as! Float
@@ -33,4 +33,11 @@ struct  StudentLocation {
         objectID = dictionary[ParseClient.JSONResponseKeys.ObjectID] as? String ?? ParseClient.Constants.UNKNOWN
         uniqueKey = dictionary[ParseClient.JSONResponseKeys.UniqueKey] as? String ?? ParseClient.Constants.UNKNOWN
     }
+}
+
+//MARK StudentLocation Equatable
+
+extension StudentInformation {}
+func == (lhs: StudentInformation, rhs: StudentInformation) -> Bool {
+    return (lhs.longitude == rhs.longitude) && (lhs.latitude == rhs.latitude)
 }

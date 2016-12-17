@@ -19,18 +19,37 @@ extension ParseClient {
         
         //MARK: URLs
         static let ApiScheme = "https"
-        static let ApiHost = "api.udacity"
-        static let ApiPath = "/parse/classes"
+        static let ApiHost = "parse.udacity.com"
+        static let ApiPath = "/parse/classes/StudentLocation"
+        
+        //MARK: HTTP Header fields
+        
+        static let Encoding = "application/json;charset=utf-8"
         
         static let UNKNOWN = "Unknown"
     }
     
     //MARK: Methods
     
-    struct Methods{
+/*    struct Methods{
+        static let Location = "/StudentLocation"
+    }
+ */
+    
+    struct HTTPMethods{
         static let UpdateLocation = "PUT"
         static let GetLocation = "GET"
         static let PostLocation = "POST"
+    }
+    
+    //MARK: HTTP Header fields
+    
+    struct HTTPHeaderFields{
+
+        static let AppID = "X-Parse-Application-Id"
+        static let ApiKey = "X-Parse-REST-API-Key"
+        static let ContentType = "content-type"
+       
     }
     
     //MARK: URL Keys
@@ -41,6 +60,8 @@ extension ParseClient {
         static let Limit = "limit"
         static let Order = "order"
         static let Skip = "skip"
+        static let Where = "where"
+        static let ObjectID = "objectId"
     }
     
     //MARK: JSON Body Keys
@@ -59,6 +80,7 @@ extension ParseClient {
         static let UniqueKey = "uniqueKey"
         static let UpdateStamp = "updatedAt"
         static let AccessControlList = "ACL"
+        static let Results = "results"
     }
     
 }

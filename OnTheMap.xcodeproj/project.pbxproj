@@ -15,7 +15,7 @@
 		D702AF8E1DF5EACE00874357 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D702AF8C1DF5EACE00874357 /* LaunchScreen.storyboard */; };
 		D702AF9D1DF730C400874357 /* ParseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702AF9C1DF730C400874357 /* ParseConstants.swift */; };
 		D702AF9F1DF7312F00874357 /* ParseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702AF9E1DF7312F00874357 /* ParseClient.swift */; };
-		D702AFA11DF73D4700874357 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702AFA01DF73D4700874357 /* StudentLocation.swift */; };
+		D702AFA11DF73D4700874357 /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702AFA01DF73D4700874357 /* StudentInformation.swift */; };
 		D702AFA31DF75A2000874357 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702AFA21DF75A2000874357 /* LoginViewController.swift */; };
 		D702AFB01DF766BD00874357 /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = D702AFA41DF766BD00874357 /* Icon-40.png */; };
 		D702AFB11DF766BD00874357 /* Icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D702AFA51DF766BD00874357 /* Icon-40@2x.png */; };
@@ -31,6 +31,8 @@
 		D702AFBB1DF766BD00874357 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = D702AFAF1DF766BD00874357 /* Contents.json */; };
 		D7BC088C1DF7A3D200755E0C /* UdacityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BC088B1DF7A3D200755E0C /* UdacityConstants.swift */; };
 		D7BC088E1DF7A4F600755E0C /* UdacityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BC088D1DF7A4F600755E0C /* UdacityClient.swift */; };
+		D7FBC69B1E030B1800CE15C0 /* notifyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FBC69A1E030B1800CE15C0 /* notifyUser.swift */; };
+		D7FBC69D1E04C3C100CE15C0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D7FBC69C1E04C3C100CE15C0 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,7 +46,7 @@
 		D702AF8F1DF5EACE00874357 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D702AF9C1DF730C400874357 /* ParseConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseConstants.swift; sourceTree = "<group>"; };
 		D702AF9E1DF7312F00874357 /* ParseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseClient.swift; sourceTree = "<group>"; };
-		D702AFA01DF73D4700874357 /* StudentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
+		D702AFA01DF73D4700874357 /* StudentInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
 		D702AFA21DF75A2000874357 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D702AFA41DF766BD00874357 /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40.png"; sourceTree = "<group>"; };
 		D702AFA51DF766BD00874357 /* Icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40@2x.png"; sourceTree = "<group>"; };
@@ -60,6 +62,8 @@
 		D702AFAF1DF766BD00874357 /* Contents.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
 		D7BC088B1DF7A3D200755E0C /* UdacityConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityConstants.swift; sourceTree = "<group>"; };
 		D7BC088D1DF7A4F600755E0C /* UdacityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityClient.swift; sourceTree = "<group>"; };
+		D7FBC69A1E030B1800CE15C0 /* notifyUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = notifyUser.swift; path = ../notifyUser.swift; sourceTree = "<group>"; };
+		D7FBC69C1E04C3C100CE15C0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +80,7 @@
 		D702AF751DF5EACE00874357 = {
 			isa = PBXGroup;
 			children = (
+				D7FBC69C1E04C3C100CE15C0 /* README.md */,
 				D702AF801DF5EACE00874357 /* OnTheMap */,
 				D702AF7F1DF5EACE00874357 /* Products */,
 			);
@@ -93,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				D702AF811DF5EACE00874357 /* AppDelegate.swift */,
+				D7FBC69A1E030B1800CE15C0 /* notifyUser.swift */,
 				D702AF951DF5ECD400874357 /* Model */,
 				D702AF991DF5ED5000874357 /* View */,
 				D702AF9A1DF5ED6200874357 /* Controller */,
@@ -124,7 +130,7 @@
 			children = (
 				D702AF9C1DF730C400874357 /* ParseConstants.swift */,
 				D702AF9E1DF7312F00874357 /* ParseClient.swift */,
-				D702AFA01DF73D4700874357 /* StudentLocation.swift */,
+				D702AFA01DF73D4700874357 /* StudentInformation.swift */,
 			);
 			name = Parse;
 			sourceTree = "<group>";
@@ -237,6 +243,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7FBC69D1E04C3C100CE15C0 /* README.md in Resources */,
 				D702AFB71DF766BD00874357 /* Icon-83.5@2x.png in Resources */,
 				D702AFB41DF766BD00874357 /* Icon-60@3x.png in Resources */,
 				D702AFB01DF766BD00874357 /* Icon-40.png in Resources */,
@@ -263,8 +270,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D702AFA31DF75A2000874357 /* LoginViewController.swift in Sources */,
+				D7FBC69B1E030B1800CE15C0 /* notifyUser.swift in Sources */,
 				D7BC088C1DF7A3D200755E0C /* UdacityConstants.swift in Sources */,
-				D702AFA11DF73D4700874357 /* StudentLocation.swift in Sources */,
+				D702AFA11DF73D4700874357 /* StudentInformation.swift in Sources */,
 				D702AF861DF5EACE00874357 /* ListViewController.swift in Sources */,
 				D702AF9F1DF7312F00874357 /* ParseClient.swift in Sources */,
 				D702AF821DF5EACE00874357 /* AppDelegate.swift in Sources */,

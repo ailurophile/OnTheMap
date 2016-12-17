@@ -36,15 +36,18 @@ import Foundation
             guard error == nil else {
                 print ("received error: \(error)")
                 // notify user
+                notifyUser(loginViewController, message: "received error: \(error!.localizedDescription)")
                 return
             }
             guard let credentials =  result?[UdacityClient.JSONResponseKeys.Account] as? [String:AnyObject] else{
                 //notify user
+                notifyUser(loginViewController, message: "key: Account not found")
                 print("key: Account not found")
                 return
             }
             guard let enrolled = credentials[UdacityClient.JSONResponseKeys.ValidFlag] as? Bool else{
                 //notify user
+                notifyUser(loginViewController, message:"Key: registered not found")
                 print("Key: registered not found")
                 return
             }
@@ -63,11 +66,14 @@ import Foundation
                 DispatchQueue.main.async(execute: {
                     let tabBarController = loginViewController.storyboard?.instantiateViewController(withIdentifier: "TabBarController")
                     loginViewController.present((tabBarController)!, animated: true)
+ //                   loginViewController.present(tabBarController!, animated: true, completion: {loginViewController.dismiss(animated: true, completion: nil)})
+                    
                     
                 })
             }
             else{
                //notify user
+                notifyUser(loginViewController, message: "student not enrolled")
                 print("student not enrolled")
             }
 
@@ -140,6 +146,7 @@ import Foundation
         
         completionHandlerForConvertData(parsedResult, nil)
     }
+    
     
 
 
