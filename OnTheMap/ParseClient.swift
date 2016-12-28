@@ -17,7 +17,7 @@ class ParseClient: NSObject{
     }
     
     func getLocations(with completionHandler: @escaping (_ locations:[[String:AnyObject]]?,_ error:NSError?)->Void){
-        queryParse(HTTPMethods.GetLocation, parameters: [JSONParameterKeys.Limit: "100" as AnyObject])  { (results, error) in
+        queryParse(HTTPMethods.GetLocation, parameters: [JSONParameterKeys.Limit: "10" as AnyObject])  { (results, error) in
             guard error == nil else{
                 completionHandler(nil,error)
                 return

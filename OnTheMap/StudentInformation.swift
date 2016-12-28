@@ -14,8 +14,8 @@ struct  StudentInformation {
     
     let firstName : String?
     let lastName : String?
-    var longitude : Float
-    var latitude : Float
+    var longitude : Float?
+    var latitude : Float?
     let location : String?
     var link : String?
     let objectID : String?
@@ -26,8 +26,8 @@ struct  StudentInformation {
     init(_ dictionary: [String:AnyObject]){
         firstName = dictionary[ParseClient.JSONResponseKeys.FirstName] as? String ?? ParseClient.Constants.UNKNOWN
         lastName = dictionary[ParseClient.JSONResponseKeys.LastName] as? String ?? ParseClient.Constants.UNKNOWN
-        longitude = dictionary[ParseClient.JSONResponseKeys.Longitude] as! Float
-        latitude = dictionary[ParseClient.JSONResponseKeys.Latitude] as! Float
+        longitude = (dictionary[ParseClient.JSONResponseKeys.Longitude] as? Float)
+        latitude = dictionary[ParseClient.JSONResponseKeys.Latitude] as? Float
         location = dictionary[ParseClient.JSONResponseKeys.Location] as? String ?? ParseClient.Constants.UNKNOWN
         link = dictionary[ParseClient.JSONResponseKeys.Link] as? String ?? ParseClient.Constants.UNKNOWN
         objectID = dictionary[ParseClient.JSONResponseKeys.ObjectID] as? String ?? ParseClient.Constants.UNKNOWN
