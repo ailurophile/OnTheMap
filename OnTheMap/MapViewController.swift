@@ -134,6 +134,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
 
     @IBAction func logout(_ sender: UIBarButtonItem) {
+        UdacityClient.sharedInstance().logout()
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
     override func didReceiveMemoryWarning() {

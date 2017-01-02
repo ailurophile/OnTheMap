@@ -96,10 +96,15 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="svi-kQ-ztX">
                                 <rect key="frame" x="131.5" y="617" width="111" height="30"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Find on the map"/>
+                                <connections>
+                                    <action selector="findOnMapPressed:" destination="SgY-Bw-rlY" eventType="touchUpInside" id="NG8-yf-Jt0"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
                             <constraint firstItem="zbI-Ii-8Q5" firstAttribute="top" secondItem="huS-kK-S5k" secondAttribute="top" constant="40" id="2kB-5o-TB6"/>
                             <constraint firstAttribute="trailing" secondItem="zbI-Ii-8Q5" secondAttribute="trailing" constant="20" symbolic="YES" id="8Hq-L5-pD5"/>
@@ -108,6 +113,9 @@
                             <constraint firstItem="zso-MZ-BFn" firstAttribute="top" secondItem="svi-kQ-ztX" secondAttribute="bottom" constant="20" id="tHa-Oc-9HX"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="locationTextView" destination="1Kx-Q7-Thw" id="cTU-gE-N3w"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OPO-eA-3bV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -126,7 +134,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="A4q-Lh-fZP" id="iU5-Jr-rh9">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>

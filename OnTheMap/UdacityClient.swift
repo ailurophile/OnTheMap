@@ -53,20 +53,12 @@ import Foundation
             }
             if enrolled{
                 print("//Login successful so logout & present map view controller")
-                request.httpMethod = Methods.Logout
-                request.httpBody = "".data(using: String.Encoding.utf8)
-                //Logout of Udacity
-                self.udacityTask(with: request, completionHandler: {(logoutResult,logoutError) in
-                    guard logoutError == nil else{
-                        print("Unsuccessful logout from Udacity")
-                        return
-                    }
-                })
+
+//                self.logout()
                 //Present MapViewController on Main
                 DispatchQueue.main.async(execute: {
                     let tabBarController = loginViewController.storyboard?.instantiateViewController(withIdentifier: "TabBarController")
                     loginViewController.present((tabBarController)!, animated: true)
- //                   loginViewController.present(tabBarController!, animated: true, completion: {loginViewController.dismiss(animated: true, completion: nil)})
                     
                     
                 })
@@ -76,13 +68,25 @@ import Foundation
                 notifyUser(loginViewController, message: "student not enrolled")
                 print("student not enrolled")
             }
-
-
-            
-            
         }
-    
-        //Make request
+    }
+    func logout(){
+        // Build URL & configure request
+        let url = UdacityURL()
+        print(url)
+        let request = NSMutableURLRequest(url: url)
+        request.httpMethod = Methods.Logout
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        //Logout of Udacity
+        self.udacityTask(with: request, completionHandler: {(logoutResult,logoutError) in
+            guard logoutError == nil else{
+                print("Unsuccessful logout from Udacity")
+                return
+            }
+            print("logged out of Udacity")
+        })
+        
     }
     private func udacityTask(with request: NSMutableURLRequest, completionHandler: @escaping (_ results: AnyObject?, _ error: NSError?)->Void){
         let session = URLSession.shared
