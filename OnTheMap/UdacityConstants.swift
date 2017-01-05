@@ -14,7 +14,8 @@ extension UdacityClient {
         //MARK: URLs
         static let ApiScheme = "https"
         static let ApiHost = "www.udacity.com"
-        static let ApiPath = "/api/session"
+        static let SessionPath = "/api/session"
+        static let UserInfoPath = "/api/users/"
     }
     
     //MARK: Methods
@@ -22,6 +23,7 @@ extension UdacityClient {
     struct Methods{
         static let Logout = "DELETE"
         static let Login = "POST"
+        static let UserInfo = "GET"
     }
     //MARK: Parameters
     
@@ -38,6 +40,10 @@ extension UdacityClient {
         static let Expiration = "expiration"
         static let Session = "session"
         static let ID = "id"
+        static let Key = "key"
+        static let FirstName = "first_name"
+        static let LastName = "last_name"
+        static let User = "user"
     }
 
     

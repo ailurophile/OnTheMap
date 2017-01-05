@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import MapKit
 
 class ParseClient: NSObject{
     var students: [StudentInformation]!
+    var user = StudentInformation()
     
     
-    func getLocation(with completionHandler: (_ locations:AnyObject?,_ error:NSError?)->Void){
+    func getLocation(with completionHandler: (_ location:AnyObject?,_ error:NSError?)->Void){
         
     }
     
@@ -35,7 +37,22 @@ class ParseClient: NSObject{
         return
     }
     
-    func postLocation(){
+    func postLocation(pin: StudentInformation, with completionHandler: @escaping (_ results:AnyObject?,_ error:NSError?)->Void){
+        //build parameters array
+        let parameterArray = [JSONResponseKeys.FirstName: ParseClient.sharedInstance().user.firstName as AnyObject,
+                              JSONResponseKeys.LastName: ParseClient.sharedInstance().user.lastName as AnyObject,
+                              JSONResponseKeys.UniqueKey: ParseClient.sharedInstance().user.uniqueKey as AnyObject,
+                              JSONResponseKeys.Link: ParseClient.sharedInstance().user.link as AnyObject,
+                              JSONResponseKeys.Location: ParseClient.sharedInstance().user.location as AnyObject,
+                              JSONResponseKeys.Latitude: ParseClient.sharedInstance().user.latitude as AnyObject,
+                              JSONResponseKeys.Longitude: ParseClient.sharedInstance().user.longitude as AnyObject]
+        queryParse(HTTPMethods.PostLocation, parameters: parameterArray , completionHandlerForQuery: {(result, error) in
+            guard error == nil else {
+                completionHandler(nil,error)
+                return
+            }
+            completionHandler(result as AnyObject?,nil)
+        })
         
     }
     
@@ -48,26 +65,45 @@ class ParseClient: NSObject{
                        HTTPHeaderFields.AppID: Constants.ParseAppID,
                        HTTPHeaderFields.ApiKey: Constants.RestAPIKey]
         var components = URLComponents()
+        var httpBody:Data?
         components.host = Constants.ApiHost
         components.scheme = Constants.ApiScheme
         components.path = Constants.ApiPath
+        
 //        components.queryItems = [URLQueryItem]()
+        if method == HTTPMethods.PostLocation{
+            guard let parameters = parameters else{
+                return
+            }
+            do {
+                let postData = try JSONSerialization.data(withJSONObject: parameters as [String: AnyObject])
+                httpBody = "{".data(using: String.Encoding.utf8)! + postData + "}".data(using: String.Encoding.utf8)!
+                print(httpBody as Any)
+                
+            }catch{
+                let userInfo = [NSLocalizedDescriptionKey : "Unable to parse student info as JSON"]
+                completionHandlerForQuery(nil,NSError(domain: "queryParse", code: 1, userInfo: userInfo))
+            }
+            
+        }
 
-        if let parameters = parameters{
-            components.queryItems = [URLQueryItem]()
-            for (key, value) in parameters {
-                let queryItem = URLQueryItem(name: key, value: "\(value)")
-                components.queryItems!.append(queryItem)
+        else {
+            
+            if let parameters = parameters{
+                components.queryItems = [URLQueryItem]()
+                for (key, value) in parameters {
+                    let queryItem = URLQueryItem(name: key, value: "\(value)")
+                    components.queryItems!.append(queryItem)
+                }
             }
-//            var httpBody =
-            if method == HTTPMethods.GetLocation{
-                print(components.url)
-            }
+
+            
             
         }
         var request = NSMutableURLRequest(url: components.url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
         request.httpMethod = method
         request.allHTTPHeaderFields = headers
+        request.httpBody = httpBody
 /*        let postData = try JSONSerialization.data(withJSONObject: parameters as Any)
         catch{
             notifyUser(

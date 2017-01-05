@@ -10,16 +10,10 @@ import Foundation
 
 
  class UdacityClient: NSObject{
-    /*
-    func getValidData(_ data: NSData?)->NSData?{
-        let range = Range(uncheckedBounds: (5, data!.count ))
-        let newData = data?.subdata(in: range)
-        return newData
-    }
- */
+    
     func login(_ loginViewController:UIViewController, email: String, password: String){
         // Build URL & configure request
-        let url = UdacityURL()
+        var url = UdacityURL(path: UdacityClient.Constants.SessionPath)
         print(url)
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = Methods.Login
@@ -51,8 +45,36 @@ import Foundation
                 print("Key: registered not found")
                 return
             }
+/*            guard let session =  result?[UdacityClient.JSONResponseKeys.Session] as? [String:AnyObject] else{
+                //notify user
+                notifyUser(loginViewController, message: "key: Session not found")
+                print("key: Session not found")
+                return
+            }*/
+            guard let id = credentials[UdacityClient.JSONResponseKeys.Key] as? String else {
+                notifyUser(loginViewController, message: "key: key not found")
+                print("key: key not found")
+                return
+            }
+            
+
             if enrolled{
-                print("//Login successful so logout & present map view controller")
+                print("//Login successful so get user info & present map view controller")
+                url = self.UdacityURL(path: UdacityClient.Constants.UserInfoPath+id)
+                self.getUserInfo(id: id , viewController: loginViewController)
+/*                print(url)
+                request.url = url
+                request.httpBody = "".data(using: String.Encoding.utf8)
+                request.httpMethod = UdacityClient.Methods.UserInfo
+                self.udacityTask(with: request, completionHandler: {(result, error) in
+                    guard error == nil else {
+                        print ("received error: \(error)")
+                        // notify user
+                        notifyUser(loginViewController, message: "received error: \(error!.localizedDescription)")
+                        return
+                    }
+                    print(result)
+                })*/
 
 //                self.logout()
                 //Present MapViewController on Main
@@ -70,9 +92,10 @@ import Foundation
             }
         }
     }
+    
     func logout(){
         // Build URL & configure request
-        let url = UdacityURL()
+        let url = UdacityURL(path: UdacityClient.Constants.SessionPath)
         print(url)
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = Methods.Logout
@@ -88,6 +111,41 @@ import Foundation
         })
         
     }
+    
+    func getUserInfo(id: String, viewController: UIViewController){
+        let url = UdacityURL(path: UdacityClient.Constants.UserInfoPath+id)
+        let request = NSMutableURLRequest(url: url)
+        request.httpMethod = Methods.UserInfo
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+
+        self.udacityTask(with: request, completionHandler: {(result, error) in
+            guard error == nil else {
+                print ("received error: \(error)")
+                // notify user
+                notifyUser(viewController, message: "received error: \(error!.localizedDescription)")
+                return
+            }
+            print("account info")
+//            print(result)
+            guard let userInfo = result?[JSONResponseKeys.User] as? [String: Any] else{
+                notifyUser(viewController, message: "Key: user not found in results")
+                return
+            }
+            let firstName = userInfo[JSONResponseKeys.FirstName] as? String
+            let lastName = userInfo[JSONResponseKeys.LastName] as? String
+            
+            // assign student info to struct for posting pin
+            ParseClient.sharedInstance().user.uniqueKey = id
+            ParseClient.sharedInstance().user.firstName = firstName
+            ParseClient.sharedInstance().user.lastName = lastName
+            
+        })
+
+    
+    }
+    // MARK: Helpers    
     private func udacityTask(with request: NSMutableURLRequest, completionHandler: @escaping (_ results: AnyObject?, _ error: NSError?)->Void){
         let session = URLSession.shared
         var task = session.dataTask(with: request as URLRequest) { data, response, error in
@@ -97,7 +155,6 @@ import Foundation
                 completionHandler(nil, NSError(domain: "makeRequest", code: 1, userInfo: userInfo))
             }
             if error != nil { // Handle error…
-//                print(error?.localizedDescription)
                 sendError("There was an error with your request: \(error)")
                 return
             }
@@ -110,20 +167,18 @@ import Foundation
                 sendError("Your request returned status code: \(HTTPURLResponse.localizedString(forStatusCode:statusCode))")
                 return
             }
-            
             // GUARD: Was there any data returned?
             guard let data = data else {
                 sendError("No data was returned by the request!")
                 return
             }
+            let newData = self.getValidData(data)
             
 
-            let range = Range(uncheckedBounds: (5, data.count ))
-            let newData = data.subdata(in: range) // ignore first 5 characters returned
             //    print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
             
 //            print(NSString(data: newData, encoding: String.Encoding.utf8.rawValue)!)
-            self.convertDataWithCompletionHandler(newData, completionHandlerForConvertData: completionHandler)
+            self.convertDataWithCompletionHandler(newData!, completionHandlerForConvertData: completionHandler)
        
         }
         task.resume()
@@ -133,7 +188,7 @@ import Foundation
     
  
     
-    // MARK: Helpers
+
     
 
     
@@ -151,15 +206,19 @@ import Foundation
         completionHandlerForConvertData(parsedResult, nil)
     }
     
+    //ignore first 5 charcaters returned from Udacity
+    func getValidData(_ data: Data?)->Data?{
+        let range = Range(uncheckedBounds: (5, data!.count ))
+        let newData = data?.subdata(in: range)
+        return newData
+    }
     
-
-
-
-    private func UdacityURL()-> URL{
+    //build Udacity URL
+    private func UdacityURL(path: String)-> URL{
         var components = URLComponents()
         components.scheme = UdacityClient.Constants.ApiScheme
         components.host = UdacityClient.Constants.ApiHost
-        components.path = UdacityClient.Constants.ApiPath
+        components.path = path
         return components.url!
     }
     

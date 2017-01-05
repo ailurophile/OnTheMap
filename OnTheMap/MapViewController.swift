@@ -69,8 +69,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 if annotations.count == 0{
                     for student in ParseClient.sharedInstance().students{
                         
-                        let lat = CLLocationDegrees(student.latitude  ?? 0.0)
-                        let long = CLLocationDegrees(student.longitude ?? 0.0)
+                        let lat = CLLocationDegrees(student.latitude  ?? ParseClient.Constants.DefaultLatitude)
+                        let long = CLLocationDegrees(student.longitude ?? ParseClient.Constants.DefaultLongitude)
                         let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
                         //create annotation
                         let annotation = MKPointAnnotation()

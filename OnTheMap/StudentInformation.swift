@@ -12,14 +12,14 @@ struct  StudentInformation {
     
     //MARK: Properties
     
-    let firstName : String?
-    let lastName : String?
+    var firstName : String?
+    var lastName : String?
     var longitude : Float?
     var latitude : Float?
-    let location : String?
+    var location : String?
     var link : String?
-    let objectID : String?
-    let uniqueKey : String?
+    var objectID : String?
+    var uniqueKey : String?
     
     //Mark Construction
     
@@ -33,11 +33,22 @@ struct  StudentInformation {
         objectID = dictionary[ParseClient.JSONResponseKeys.ObjectID] as? String ?? ParseClient.Constants.UNKNOWN
         uniqueKey = dictionary[ParseClient.JSONResponseKeys.UniqueKey] as? String ?? ParseClient.Constants.UNKNOWN
     }
+    init(){
+        firstName = ParseClient.Constants.UNKNOWN
+        lastName = ParseClient.Constants.UNKNOWN
+        longitude = ParseClient.Constants.DefaultLongitude
+        latitude = ParseClient.Constants.DefaultLatitude
+        location = ParseClient.Constants.UNKNOWN
+        link = ParseClient.Constants.UNKNOWN
+        objectID = ParseClient.Constants.UNKNOWN
+        uniqueKey = ParseClient.Constants.UNKNOWN
+        
+    }
 }
 
 //MARK StudentLocation Equatable
 
 extension StudentInformation {}
 func == (lhs: StudentInformation, rhs: StudentInformation) -> Bool {
-    return (lhs.longitude == rhs.longitude) && (lhs.latitude == rhs.latitude)
+    return (lhs.uniqueKey == rhs.uniqueKey)
 }

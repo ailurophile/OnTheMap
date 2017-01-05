@@ -27,6 +27,9 @@ extension ParseClient {
         static let Encoding = "application/json;charset=utf-8"
         
         static let UNKNOWN = "Unknown"
+        static let DefaultLatitude = Float(0.0)
+        static let DefaultLongitude = Float(0.0)
+        
     }
     
     //MARK: Methods
