@@ -77,8 +77,11 @@ class ParseClient: NSObject{
             }
             do {
                 let postData = try JSONSerialization.data(withJSONObject: parameters as [String: AnyObject])
-                httpBody = "{".data(using: String.Encoding.utf8)! + postData + "}".data(using: String.Encoding.utf8)!
-                print(httpBody as Any)
+//                httpBody = "{".data(using: String.Encoding.utf8)! + postData + "}".data(using: String.Encoding.utf8)!
+                httpBody = postData
+
+                print(NSString(data: httpBody!, encoding: String.Encoding.utf8.rawValue)!)
+
                 
             }catch{
                 let userInfo = [NSLocalizedDescriptionKey : "Unable to parse student info as JSON"]
@@ -104,6 +107,7 @@ class ParseClient: NSObject{
         request.httpMethod = method
         request.allHTTPHeaderFields = headers
         request.httpBody = httpBody
+        
 /*        let postData = try JSONSerialization.data(withJSONObject: parameters as Any)
         catch{
             notifyUser(
@@ -147,12 +151,7 @@ class ParseClient: NSObject{
             }
             print(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)
 
-            
-//            let range = Range(uncheckedBounds: (5, data.count ))
-//            let newData = data.subdata(in: range) // ignore first 5 characters returned
-            //    print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
-            
-            //            print(NSString(data: newData, encoding: String.Encoding.utf8.rawValue)!)
+   
             self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForQuery)
             
         }
