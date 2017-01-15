@@ -14,12 +14,26 @@ class ParseClient: NSObject{
     var user = StudentInformation()
     
     
-    func getLocation(with completionHandler: (_ location:AnyObject?,_ error:NSError?)->Void){
+    func findLocation(_with completionHandler: @escaping (_ location:[[String: AnyObject]]?,_ error:NSError?)->Void){
+        queryParse(HTTPMethods.GetLocation, parameters: [JSONResponseKeys.UniqueKey: ParseClient.sharedInstance().user.uniqueKey as AnyObject]  , searchExisting: true, completionHandlerForQuery: { (result, error) in
+            guard error == nil else{
+                completionHandler(nil,error)
+                return
+            }
+            guard let studentLocation = (result as AnyObject)[ParseClient.JSONResponseKeys.Results] as? [[String:AnyObject]] else{
+                let userInfo = [NSLocalizedDescriptionKey : "Key: \(ParseClient.JSONResponseKeys.Results)' not found in results)"]
+                completionHandler(nil, NSError(domain: "findLocation", code: 1, userInfo: userInfo))
+                return
+            }
+            print("student location: \(studentLocation)")
+            completionHandler(studentLocation, nil)
+            return
+        })
         
     }
     
     func getLocations(with completionHandler: @escaping (_ locations:[[String:AnyObject]]?,_ error:NSError?)->Void){
-        queryParse(HTTPMethods.GetLocation, parameters: [JSONParameterKeys.Limit: "10" as AnyObject])  { (results, error) in
+        queryParse(HTTPMethods.GetLocation, parameters: [JSONParameterKeys.Limit: "10" as AnyObject], searchExisting: false)  { (results, error) in
             guard error == nil else{
                 completionHandler(nil,error)
                 return
@@ -39,14 +53,9 @@ class ParseClient: NSObject{
     
     func postLocation(pin: StudentInformation, with completionHandler: @escaping (_ results:AnyObject?,_ error:NSError?)->Void){
         //build parameters array
-        let parameterArray = [JSONResponseKeys.FirstName: ParseClient.sharedInstance().user.firstName as AnyObject,
-                              JSONResponseKeys.LastName: ParseClient.sharedInstance().user.lastName as AnyObject,
-                              JSONResponseKeys.UniqueKey: ParseClient.sharedInstance().user.uniqueKey as AnyObject,
-                              JSONResponseKeys.Link: ParseClient.sharedInstance().user.link as AnyObject,
-                              JSONResponseKeys.Location: ParseClient.sharedInstance().user.location as AnyObject,
-                              JSONResponseKeys.Latitude: ParseClient.sharedInstance().user.latitude as AnyObject,
-                              JSONResponseKeys.Longitude: ParseClient.sharedInstance().user.longitude as AnyObject]
-        queryParse(HTTPMethods.PostLocation, parameters: parameterArray , completionHandlerForQuery: {(result, error) in
+        let parameterArray = buildParameters()
+
+        queryParse(HTTPMethods.PostLocation, parameters: parameterArray ,searchExisting: false , completionHandlerForQuery: {(result, error) in
             guard error == nil else {
                 completionHandler(nil,error)
                 return
@@ -60,7 +69,7 @@ class ParseClient: NSObject{
         
     }
     
-    private func queryParse(_ method:String, parameters:[String:AnyObject]?, completionHandlerForQuery: @escaping ( _ results: Any?, _ error: NSError?) -> Void){
+    private func queryParse(_ method:String, parameters:[String:AnyObject]?, searchExisting: Bool, completionHandlerForQuery: @escaping ( _ results: Any?, _ error: NSError?) -> Void){
         let headers = [HTTPHeaderFields.ContentType: Constants.Encoding,
                        HTTPHeaderFields.AppID: Constants.ParseAppID,
                        HTTPHeaderFields.ApiKey: Constants.RestAPIKey]
@@ -70,15 +79,24 @@ class ParseClient: NSObject{
         components.scheme = Constants.ApiScheme
         components.path = Constants.ApiPath
         
+        print("queryParese PARAMETERS : \(parameters)")
+        
 //        components.queryItems = [URLQueryItem]()
-        if method == HTTPMethods.PostLocation{
+        if method == HTTPMethods.PostLocation || searchExisting == true {
             guard let parameters = parameters else{
                 return
             }
             do {
                 let postData = try JSONSerialization.data(withJSONObject: parameters as [String: AnyObject])
 //                httpBody = "{".data(using: String.Encoding.utf8)! + postData + "}".data(using: String.Encoding.utf8)!
-                httpBody = postData
+                if searchExisting == true {
+                    httpBody = "where=".data(using: String.Encoding.utf8)
+                    httpBody?.append(postData)
+
+                }
+                else {
+                    httpBody = postData
+                }
 
                 print(NSString(data: httpBody!, encoding: String.Encoding.utf8.rawValue)!)
 
@@ -90,7 +108,8 @@ class ParseClient: NSObject{
             
         }
 
-        else {
+        else if method == HTTPMethods.GetLocation{
+
             
             if let parameters = parameters{
                 components.queryItems = [URLQueryItem]()
@@ -108,20 +127,6 @@ class ParseClient: NSObject{
         request.allHTTPHeaderFields = headers
         request.httpBody = httpBody
         
-/*        let postData = try JSONSerialization.data(withJSONObject: parameters as Any)
-        catch{
-            notifyUser(
-        }
-        
-        var request = NSMutableURLRequest(URL: NSURL(string: "https://api.themoviedb.org/3/account/6438892/watchlist?session_id=6d4a20b3e8daaef975fbfc2e02e323ec8464db65&api_key=ea986b024c22a35a7df206b6e4d13192")!,
-                                          cachePolicy: .UseProtocolCachePolicy,
-                                          timeoutInterval: 10.0)
-        request.HTTPMethod = method
-        request.allHTTPHeaderFields = headers
-        request.HTTPBody = "where+" + postData
- */
-
-    
         let session = URLSession.shared
         var task = session.dataTask(with: request as URLRequest) { data, response, error in
             func sendError(_ error: String) {
@@ -163,6 +168,18 @@ class ParseClient: NSObject{
     
     
     // MARK: Helpers
+    
+    func buildParameters()->[String:AnyObject]{
+        let parameterArray = [JSONResponseKeys.FirstName: ParseClient.sharedInstance().user.firstName as AnyObject,
+                              JSONResponseKeys.LastName: ParseClient.sharedInstance().user.lastName as AnyObject,
+                              JSONResponseKeys.UniqueKey: ParseClient.sharedInstance().user.uniqueKey as AnyObject,
+                              JSONResponseKeys.Link: ParseClient.sharedInstance().user.link as AnyObject,
+                              JSONResponseKeys.Location: ParseClient.sharedInstance().user.location as AnyObject,
+                              JSONResponseKeys.Latitude: ParseClient.sharedInstance().user.latitude as AnyObject,
+                              JSONResponseKeys.Longitude: ParseClient.sharedInstance().user.longitude as AnyObject]
+        return parameterArray
+
+    }
     
     
     

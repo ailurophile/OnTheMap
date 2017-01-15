@@ -71,17 +71,38 @@ class InformationViewController: UIViewController, UITextViewDelegate{
                 //show pin on map and get link
                 
                 ParseClient.sharedInstance().user.link = UdacityClient.Constants.ApiHost
-                //post location to Parse
-                ParseClient.sharedInstance().postLocation(pin: ParseClient.sharedInstance().user, with:{ (result, error) in
+                //Check if pin already exists for user
+                ParseClient.sharedInstance().findLocation( _with: {(result,error) in
                     guard error == nil else{
-                        notifyUser(self, message: "Error posting pin to map")
-                        print("Posting error: ",error?.localizedDescription)
+                        notifyUser(self, message: "Error encountered while searching for existing pin")
                         return
                     }
-                    // use result
-                    print(result)
+                    if let result = result{
+                        print(result)
+                        print("ask user whether to update here")
+                    }
+ 
+/*                if false{
+                    return
+                }
+ */
+                    else {
+                        //post location to Parse
+                        ParseClient.sharedInstance().postLocation(pin: ParseClient.sharedInstance().user, with:{ (result, error) in
+                            guard error == nil else{
+                                notifyUser(self, message: "Error posting pin to map")
+                                print("Posting error: ",error?.localizedDescription)
+                                return
+                            }
+                            // use result
+                            print(result)
+                            
+                        })
+                        
+                    }
                     
-                })
+                    })
+
                 
             })
         }
