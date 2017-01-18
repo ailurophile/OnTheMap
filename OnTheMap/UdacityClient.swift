@@ -64,19 +64,7 @@ import Foundation
                 ParseClient.sharedInstance().user.uniqueKey = id
 
                 self.getUserInfo(id: id , viewController: loginViewController)
-/*                print(url)
-                request.url = url
-                request.httpBody = "".data(using: String.Encoding.utf8)
-                request.httpMethod = UdacityClient.Methods.UserInfo
-                self.udacityTask(with: request, completionHandler: {(result, error) in
-                    guard error == nil else {
-                        print ("received error: \(error)")
-                        // notify user
-                        notifyUser(loginViewController, message: "received error: \(error!.localizedDescription)")
-                        return
-                    }
-                    print(result)
-                })*/
+
 
 //                self.logout()
                 //Present MapViewController on Main
@@ -140,7 +128,6 @@ import Foundation
             print(firstName,lastName)
             
             // assign student info to struct for posting pin
-//            ParseClient.sharedInstance().user.uniqueKey = id
             ParseClient.sharedInstance().user.firstName = firstName
             ParseClient.sharedInstance().user.lastName = lastName
             

@@ -77,6 +77,7 @@ class ParseClient: NSObject{
                        HTTPHeaderFields.ApiKey: Constants.RestAPIKey]
         var components = URLComponents()
         var httpBody:Data?
+        var request : NSMutableURLRequest!
         components.host = Constants.ApiHost
         components.scheme = Constants.ApiScheme
         components.path = Constants.ApiPath
@@ -84,24 +85,15 @@ class ParseClient: NSObject{
         print("queryParese PARAMETERS : \(parameters)")
         
 //        components.queryItems = [URLQueryItem]()
-        if method == HTTPMethods.PostLocation || searchExisting == true {
+        if method == HTTPMethods.PostLocation  {
             guard let parameters = parameters else{
                 return
             }
             do {
                 let postData = try JSONSerialization.data(withJSONObject: parameters as [String: AnyObject])
-//                httpBody = "{".data(using: String.Encoding.utf8)! + postData + "}".data(using: String.Encoding.utf8)!
-                if searchExisting == true {
-                    httpBody = "where=".data(using: String.Encoding.utf8)
-                    httpBody?.append(postData)
-
-                }
-                else {
-                    httpBody = postData
-                }
-
+                httpBody = postData
                 print(NSString(data: httpBody!, encoding: String.Encoding.utf8.rawValue)!)
-
+                request = NSMutableURLRequest(url: components.url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
                 
             }catch{
                 let userInfo = [NSLocalizedDescriptionKey : "Unable to parse student info as JSON"]
@@ -112,19 +104,42 @@ class ParseClient: NSObject{
 
         else if method == HTTPMethods.GetLocation{
 
-            
-            if let parameters = parameters{
-                components.queryItems = [URLQueryItem]()
-                for (key, value) in parameters {
-                    let queryItem = URLQueryItem(name: key, value: "\(value)")
-                    components.queryItems!.append(queryItem)
+            if searchExisting == true {
+                
+                var urlString = String(describing: components.url) + "?where="
+                urlString = urlString.replacingOccurrences(of: "Optional(", with: "")
+                urlString = urlString.replacingOccurrences(of: ")", with: "")
+                let prefix = "{\"uniqueKey\":\"".addingPercentEncoding(withAllowedCharacters: .alphanumerics)
+                urlString.append(prefix!)
+                urlString.append(ParseClient.sharedInstance().user.uniqueKey! as String)
+                let suffix = "\"}".addingPercentEncoding(withAllowedCharacters: .alphanumerics)
+                urlString.append(suffix!)
+
+
+                
+                
+ //               urlString = urlString.replacingOccurrences(of: "?", with: prefix!) + suffix!
+                print("urlString = \(urlString)")
+                let newUrl = URL(string: urlString)
+                request = NSMutableURLRequest(url: newUrl!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
+                
+            }
+            else{
+                if let parameters = parameters{
+                    components.queryItems = [URLQueryItem]()
+                    for (key, value) in parameters {
+                        let queryItem = URLQueryItem(name: key, value: "\(value)")
+                        components.queryItems!.append(queryItem)
+                        request = NSMutableURLRequest(url: components.url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
+                    }
+                    
                 }
             }
 
             
             
         }
-        var request = NSMutableURLRequest(url: components.url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
+//        var request = NSMutableURLRequest(url: components.url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
         request.httpMethod = method
         request.allHTTPHeaderFields = headers
         request.httpBody = httpBody

@@ -42,12 +42,20 @@ class InformationViewController: UIViewController, UITextViewDelegate{
             link = linkTextView.text
         }
     }
+    func textViewShouldReturn(_ textView: UITextView) -> Bool {
+        resignFirstResponder()
+        return true
+    }
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        resignFirstResponder()
+        return true
+
+    }
     //MARK Map functions
     @IBAction func urlEntered(_ sender: UIButton) {
         print("url: \(link)")
         ParseClient.sharedInstance().user.link = link
         
-        let url = URL(string: link)
         
         //Check if pin already exists for user
         ParseClient.sharedInstance().findLocation( _with: {(result,error) in
@@ -122,47 +130,6 @@ class InformationViewController: UIViewController, UITextViewDelegate{
                     }
                     let annotation = MapViewController.getAnnotation(student: ParseClient.sharedInstance().user)
                     self.mapView.addAnnotation(annotation )})
-
-                //show pin on map and get link
-//                self.mapView.addAnnotation(annotation as! MKAnnotation)
-/*                let url = URL(string: self.link)
-                
-                annotation.url = url
-                
-                ParseClient.sharedInstance().user.link = UdacityClient.Constants.ApiHost
-                //Check if pin already exists for user
-                ParseClient.sharedInstance().findLocation( _with: {(result,error) in
-                    guard error == nil else{
-                        notifyUser(self, message: "Error encountered while searching for existing pin")
-                        return
-                    }
-                    if let result = result{
-                        print(result)
-                        print("ask user whether to update here")
-                    }
- 
-/*                if false{
-                    return
-                }
- */
-                    else {
-                        //post location to Parse
-//                        ParseClient.sharedInstance().postLocation(pin: ParseClient.sharedInstance().user, with:
-                        ParseClient.sharedInstance().postLocation( with:{ (result, error) in
-                            guard error == nil else{
-                                notifyUser(self, message: "Error posting pin to map")
-                                print("Posting error: ",error?.localizedDescription)
-                                return
-                            }
-                            // use result
-                            print(result)
-                            
-                        })
-                        
-                    }
-                    
-                    })
-                */
 
                 
             })
