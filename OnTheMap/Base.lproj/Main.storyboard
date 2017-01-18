@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ifW-g8-Qkw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ifW-g8-Qkw">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -125,27 +125,72 @@
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="UHU-pv-1fO" id="iB2-B6-aRi"/>
+                        <outlet property="linkTextView" destination="XEk-I9-vWR" id="jjI-4J-Lsv"/>
+                        <outlet property="linkView" destination="FyB-Fb-gET" id="nlN-cN-JwZ"/>
                         <outlet property="locationTextView" destination="1Kx-Q7-Thw" id="cTU-gE-N3w"/>
+                        <outlet property="locationView" destination="huS-kK-S5k" id="U2m-nN-1gx"/>
+                        <outlet property="mapView" destination="zhx-aS-fHO" id="KVr-9x-eyI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OPO-eA-3bV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <view contentMode="scaleToFill" restorationIdentifier="linkView" id="FyB-Fb-gET">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <rect key="frame" x="0.0" y="0.0" width="343" height="667"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="zhx-aS-fHO">
-                            <rect key="frame" x="0.0" y="144" width="375" height="523"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="zhx-aS-fHO">
+                            <rect key="frame" x="-16" y="144" width="375" height="523"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="375" id="LHK-yx-4IT"/>
+                                <constraint firstAttribute="height" constant="523" id="rDt-fw-4MH"/>
+                            </constraints>
                         </mapView>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Enter URL here" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="XEk-I9-vWR">
-                            <rect key="frame" x="0.0" y="35" width="375" height="91"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Enter URL here" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="XEk-I9-vWR">
+                            <rect key="frame" x="-16" y="53" width="375" height="73"/>
                             <color key="backgroundColor" red="0.89373715279999999" green="0.38131491760000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="73" id="fGC-KP-2qN"/>
+                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T1C-zo-uAu">
+                            <rect key="frame" x="128" y="617" width="88" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="88" id="Uin-EE-F2x"/>
+                            </constraints>
+                            <state key="normal" title="Submit"/>
+                            <connections>
+                                <action selector="urlEntered:" destination="SgY-Bw-rlY" eventType="touchUpInside" id="bTo-LN-N5L"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eTr-VI-1BU">
+                            <rect key="frame" x="287" y="20" width="62" height="25"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="25" id="hVr-Yh-Vcx"/>
+                                <constraint firstAttribute="width" constant="62" id="u4E-Os-heZ"/>
+                            </constraints>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                            </state>
+                            <connections>
+                                <action selector="dismiss:" destination="SgY-Bw-rlY" eventType="touchUpInside" id="IZQ-FX-HwU"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="eTr-VI-1BU" firstAttribute="top" secondItem="FyB-Fb-gET" secondAttribute="top" constant="20" id="6Ut-R0-7Ue"/>
+                        <constraint firstItem="T1C-zo-uAu" firstAttribute="centerX" secondItem="FyB-Fb-gET" secondAttribute="centerX" id="C3X-dD-P0F"/>
+                        <constraint firstItem="zhx-aS-fHO" firstAttribute="top" secondItem="XEk-I9-vWR" secondAttribute="bottom" constant="18" id="QRG-mI-DTk"/>
+                        <constraint firstItem="zhx-aS-fHO" firstAttribute="trailing" secondItem="eTr-VI-1BU" secondAttribute="trailing" constant="10" id="TIj-52-7cC"/>
+                        <constraint firstItem="T1C-zo-uAu" firstAttribute="bottom" secondItem="zhx-aS-fHO" secondAttribute="bottom" constant="-20" id="UWU-nv-5uv"/>
+                        <constraint firstItem="XEk-I9-vWR" firstAttribute="top" secondItem="eTr-VI-1BU" secondAttribute="bottom" constant="8" symbolic="YES" id="YoG-B8-y9X"/>
+                        <constraint firstAttribute="bottom" secondItem="zhx-aS-fHO" secondAttribute="bottom" id="bNk-DA-840"/>
+                        <constraint firstItem="zhx-aS-fHO" firstAttribute="trailing" secondItem="XEk-I9-vWR" secondAttribute="trailing" id="gla-CV-VLn"/>
+                        <constraint firstAttribute="trailing" secondItem="zhx-aS-fHO" secondAttribute="trailing" constant="-16" id="rU2-Z8-9hL"/>
+                        <constraint firstItem="zhx-aS-fHO" firstAttribute="leading" secondItem="FyB-Fb-gET" secondAttribute="leading" constant="-16" id="rxr-SZ-Iqs"/>
+                        <constraint firstItem="zhx-aS-fHO" firstAttribute="leading" secondItem="XEk-I9-vWR" secondAttribute="leading" id="x1J-so-mc2"/>
+                    </constraints>
                 </view>
             </objects>
             <point key="canvasLocation" x="1533.5999999999999" y="-339.58020989505252"/>
@@ -163,7 +208,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="A4q-Lh-fZP" id="iU5-Jr-rh9">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>

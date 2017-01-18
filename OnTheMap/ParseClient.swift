@@ -33,7 +33,7 @@ class ParseClient: NSObject{
     }
     
     func getLocations(with completionHandler: @escaping (_ locations:[[String:AnyObject]]?,_ error:NSError?)->Void){
-        queryParse(HTTPMethods.GetLocation, parameters: [JSONParameterKeys.Limit: "10" as AnyObject], searchExisting: false)  { (results, error) in
+        queryParse(HTTPMethods.GetLocation, parameters: [JSONParameterKeys.Limit: "100" as AnyObject], searchExisting: false)  { (results, error) in
             guard error == nil else{
                 completionHandler(nil,error)
                 return
@@ -51,7 +51,9 @@ class ParseClient: NSObject{
         return
     }
     
-    func postLocation(pin: StudentInformation, with completionHandler: @escaping (_ results:AnyObject?,_ error:NSError?)->Void){
+//    func postLocation(pin: StudentInformation, with completionHandler: @escaping (_ results:AnyObject?,_ error:NSError?)->Void){
+    func postLocation(with completionHandler: @escaping (_ results:AnyObject?,_ error:NSError?)->Void){
+
         //build parameters array
         let parameterArray = buildParameters()
 

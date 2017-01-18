@@ -13,9 +13,13 @@ import MapKit
 
 class InformationViewController: UIViewController, UITextViewDelegate{
     @IBOutlet weak var locationTextView: UITextView!
-    
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var linkTextView: UITextView!
+    @IBOutlet var linkView: UIView!
+    @IBOutlet var locationView: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     var location: String = ""
+    var link: String = ""
     
     @IBAction func dismiss(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -23,15 +27,61 @@ class InformationViewController: UIViewController, UITextViewDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         locationTextView.delegate = self
+        linkTextView.delegate = self
         self.activityIndicator.stopAnimating()
     }
     func textViewDidBeginEditing(_ textView: UITextView) {
-        locationTextView.text = ""
+//        locationTextView.text = ""
+        textView.text = ""
     }
     func textViewDidChange(_ textView: UITextView) {
-        location = locationTextView.text
+        if textView == locationTextView{
+            location = locationTextView.text
+        }
+        else {
+            link = linkTextView.text
+        }
     }
     //MARK Map functions
+    @IBAction func urlEntered(_ sender: UIButton) {
+        print("url: \(link)")
+        ParseClient.sharedInstance().user.link = link
+        
+        let url = URL(string: link)
+        
+        //Check if pin already exists for user
+        ParseClient.sharedInstance().findLocation( _with: {(result,error) in
+            guard error == nil else{
+                notifyUser(self, message: "Error encountered while searching for existing pin")
+                return
+            }
+            if let result = result{
+                print(result)
+                print("ask user whether to update here")
+            }
+                
+                /*                if false{
+                 return
+                 }
+                 */
+            else {
+                //post location to Parse
+                //                        ParseClient.sharedInstance().postLocation(pin: ParseClient.sharedInstance().user, with:
+                ParseClient.sharedInstance().postLocation( with:{ (result, error) in
+                    guard error == nil else{
+                        notifyUser(self, message: "Error posting pin to map")
+                        print("Posting error: ",error?.localizedDescription)
+                        return
+                    }
+                    // use result
+                    print(result)
+                    
+                })
+            }
+
+        })
+    }
+    
     
     @IBAction func findOnMapPressed(_ sender: UIButton) {
         print("location: \(location)")
@@ -52,23 +102,32 @@ class InformationViewController: UIViewController, UITextViewDelegate{
             let search = MKLocalSearch(request: request)
             search.start(completionHandler: {(response, error) in
                 print(response as Any)
-                guard let annotation = response?.mapItems[0] else{
+                guard let mapItem = response?.mapItems[0] else{
                     print("no location found!")
+                    self.activityIndicator.stopAnimating()
                     return
                 }
-                let url = URL(string: UdacityClient.Constants.ApiHost)
-                
-                annotation.url = url
-                ParseClient.sharedInstance().user.longitude = Float(annotation.placemark.coordinate.longitude)
-                ParseClient.sharedInstance().user.latitude = Float(annotation.placemark.coordinate.latitude)
-                print("annotation = \(annotation)")
+
+                ParseClient.sharedInstance().user.longitude = Float(mapItem.placemark.coordinate.longitude)
+                ParseClient.sharedInstance().user.latitude = Float(mapItem.placemark.coordinate.latitude)
+                print("mapItem = \(mapItem)")
                 self.activityIndicator.stopAnimating()
                 if (error != nil){
                     print("error: \(error)")
                     return
                 }
-//                UIView.transition(from: locationView, to: linkView, duration: <#T##TimeInterval#>, options: <#T##UIViewAnimationOptions#>, completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
+                UIView.transition(from: self.locationView, to: self.linkView, duration: 2, options: .layoutSubviews, completion:{(finished) in
+                    while(finished != true) {
+                        continue
+                    }
+                    let annotation = MapViewController.getAnnotation(student: ParseClient.sharedInstance().user)
+                    self.mapView.addAnnotation(annotation )})
+
                 //show pin on map and get link
+//                self.mapView.addAnnotation(annotation as! MKAnnotation)
+/*                let url = URL(string: self.link)
+                
+                annotation.url = url
                 
                 ParseClient.sharedInstance().user.link = UdacityClient.Constants.ApiHost
                 //Check if pin already exists for user
@@ -88,7 +147,8 @@ class InformationViewController: UIViewController, UITextViewDelegate{
  */
                     else {
                         //post location to Parse
-                        ParseClient.sharedInstance().postLocation(pin: ParseClient.sharedInstance().user, with:{ (result, error) in
+//                        ParseClient.sharedInstance().postLocation(pin: ParseClient.sharedInstance().user, with:
+                        ParseClient.sharedInstance().postLocation( with:{ (result, error) in
                             guard error == nil else{
                                 notifyUser(self, message: "Error posting pin to map")
                                 print("Posting error: ",error?.localizedDescription)
@@ -102,6 +162,7 @@ class InformationViewController: UIViewController, UITextViewDelegate{
                     }
                     
                     })
+                */
 
                 
             })

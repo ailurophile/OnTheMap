@@ -69,7 +69,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 if annotations.count == 0{
                     for student in ParseClient.sharedInstance().students{
                         
-                        let lat = CLLocationDegrees(student.latitude  ?? ParseClient.Constants.DefaultLatitude)
+ /*                       let lat = CLLocationDegrees(student.latitude  ?? ParseClient.Constants.DefaultLatitude)
                         let long = CLLocationDegrees(student.longitude ?? ParseClient.Constants.DefaultLongitude)
                         let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
                         //create annotation
@@ -78,8 +78,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         annotation.title = "\(student.firstName!) \(student.lastName!)"
                         annotation.subtitle = student.link
                         //add annotaion to array
+ 
                         annotations.append(annotation)
-                        
+ */
+                        let annotation = MapViewController.getAnnotation(student: student)
+                        annotations.append(annotation)
                         print(student.firstName)
                         
                     }
@@ -131,6 +134,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
             }
         }
+    }
+    
+    class func getAnnotation(student: StudentInformation)-> MKPointAnnotation{
+        let lat = CLLocationDegrees(student.latitude  ?? ParseClient.Constants.DefaultLatitude)
+        let long = CLLocationDegrees(student.longitude ?? ParseClient.Constants.DefaultLongitude)
+        let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+        //create annotation
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = "\(student.firstName!) \(student.lastName!)"
+        annotation.subtitle = student.link
+        return annotation
+
+        
     }
 
     @IBAction func logout(_ sender: UIBarButtonItem) {
