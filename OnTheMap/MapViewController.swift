@@ -42,6 +42,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("INSIDE VIEW DID LOAD")
+        
+        // Register for notifications
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadModel), name: NSNotification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(reloadModel), name: NSNotification.Name(ParseClient.Constants.ModelUpdatedNotificationKey)
+        
         var annotations = [MKPointAnnotation]()
         //Load student information if not already available
         if ParseClient.sharedInstance().students == nil{
@@ -67,26 +73,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
  */
                 //Create annotations array if it does not yet exist
                 if annotations.count == 0{
-                    for student in ParseClient.sharedInstance().students{
-                        
- /*                       let lat = CLLocationDegrees(student.latitude  ?? ParseClient.Constants.DefaultLatitude)
-                        let long = CLLocationDegrees(student.longitude ?? ParseClient.Constants.DefaultLongitude)
-                        let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-                        //create annotation
-                        let annotation = MKPointAnnotation()
-                        annotation.coordinate = coordinate
-                        annotation.title = "\(student.firstName!) \(student.lastName!)"
-                        annotation.subtitle = student.link
-                        //add annotaion to array
- 
-                        annotations.append(annotation)
- */
+/*                    for student in ParseClient.sharedInstance().students{
                         let annotation = MapViewController.getAnnotation(student: student)
                         annotations.append(annotation)
                         print(student.firstName)
                         
                     }
-                               self.mapView.addAnnotations(annotations)
+                    self.mapView.addAnnotations(annotations)
+ */
+                    self.addAnnotationsToMap()
                 }
                 
                 
@@ -124,6 +119,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return pinView
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     // This delegate method is implemented to respond to taps. It opens the system browser
     // to the URL specified in the annotationViews subtitle property.
@@ -134,6 +132,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
             }
         }
+    }
+    
+    private func addAnnotationsToMap(){
+        var annotations = [MKPointAnnotation]()
+        for student in ParseClient.sharedInstance().students{
+            let annotation = MapViewController.getAnnotation(student: student)
+            annotations.append(annotation)
+            
+        }
+        self.mapView.addAnnotations(annotations)
     }
     
     class func getAnnotation(student: StudentInformation)-> MKPointAnnotation{
@@ -148,6 +156,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return annotation
 
         
+    }
+    
+    @objc private func reloadModel(){
+        mapView.removeAnnotations(mapView.annotations)
+        addAnnotationsToMap()
     }
 
     @IBAction func logout(_ sender: UIBarButtonItem) {

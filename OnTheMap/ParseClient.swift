@@ -67,7 +67,20 @@ class ParseClient: NSObject{
         
     }
     
-    func updateLocation(){
+    func updateLocation(with completionHandler: @escaping (_ results:AnyObject?,_ error:NSError?)->Void){
+        
+        //build parameters array
+        let parameterArray = buildParameters()
+        
+        queryParse(HTTPMethods.UpdateLocation, parameters: parameterArray ,searchExisting: false , completionHandlerForQuery: {(result, error) in
+            guard error == nil else {
+                completionHandler(nil,error)
+                return
+            }
+            completionHandler(result as AnyObject?,nil)
+        })
+        
+
         
     }
     
@@ -85,8 +98,14 @@ class ParseClient: NSObject{
         print("queryParese PARAMETERS : \(parameters)")
         
 //        components.queryItems = [URLQueryItem]()
-        if method == HTTPMethods.PostLocation  {
+        if method == HTTPMethods.PostLocation || method == HTTPMethods.UpdateLocation {
+            if method == HTTPMethods.UpdateLocation{
+                components.path.append(ParseClient.sharedInstance().user.uniqueKey!)
+            }
             guard let parameters = parameters else{
+                let userInfo = [NSLocalizedDescriptionKey : "No parameters to post!"]
+                completionHandlerForQuery(nil,NSError(domain: "queryParse", code: 1, userInfo: userInfo))
+
                 return
             }
             do {
@@ -106,20 +125,14 @@ class ParseClient: NSObject{
 
             if searchExisting == true {
                 
-                var urlString = String(describing: components.url) + "?where="
-                urlString = urlString.replacingOccurrences(of: "Optional(", with: "")
-                urlString = urlString.replacingOccurrences(of: ")", with: "")
+
+                var urlString = (components.url?.absoluteString)! + "?where="
                 let prefix = "{\"uniqueKey\":\"".addingPercentEncoding(withAllowedCharacters: .alphanumerics)
                 urlString.append(prefix!)
                 urlString.append(ParseClient.sharedInstance().user.uniqueKey! as String)
                 let suffix = "\"}".addingPercentEncoding(withAllowedCharacters: .alphanumerics)
                 urlString.append(suffix!)
-
-
-                
-                
- //               urlString = urlString.replacingOccurrences(of: "?", with: prefix!) + suffix!
-                print("urlString = \(urlString)")
+//                print("urlString = \(urlString)")
                 let newUrl = URL(string: urlString)
                 request = NSMutableURLRequest(url: newUrl!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
                 
@@ -135,10 +148,9 @@ class ParseClient: NSObject{
                     
                 }
             }
-
-            
             
         }
+
 //        var request = NSMutableURLRequest(url: components.url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
         request.httpMethod = method
         request.allHTTPHeaderFields = headers

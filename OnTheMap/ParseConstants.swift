@@ -29,6 +29,7 @@ extension ParseClient {
         static let UNKNOWN = "Unknown"
         static let DefaultLatitude = Float(0.0)
         static let DefaultLongitude = Float(0.0)
+        static let ModelUpdatedNotificationKey = "LisaLitchfield.ModelUpdatedNotificationKey"
         
     }
     

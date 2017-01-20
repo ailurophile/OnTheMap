@@ -12,13 +12,21 @@ class ListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        // Register for notifications
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadModel), name: NSNotification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: nil)
+
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
 
     @IBAction func dismiss(_ sender: UIBarButtonItem) {
         UdacityClient.sharedInstance().logout()
@@ -38,6 +46,9 @@ class ListViewController: UITableViewController {
         cell?.textLabel?.text = student.firstName! + " " + (student.lastName)!
         cell?.imageView?.image = #imageLiteral(resourceName: "pin")
         return cell!
+    }
+    @objc private func reloadModel(){
+        tableView.reloadData()    
     }
 
 }

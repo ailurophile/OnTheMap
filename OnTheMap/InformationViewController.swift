@@ -42,14 +42,9 @@ class InformationViewController: UIViewController, UITextViewDelegate{
             link = linkTextView.text
         }
     }
-    func textViewShouldReturn(_ textView: UITextView) -> Bool {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("I'm touched!")
         resignFirstResponder()
-        return true
-    }
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        resignFirstResponder()
-        return true
-
     }
     //MARK Map functions
     @IBAction func urlEntered(_ sender: UIButton) {
@@ -65,7 +60,25 @@ class InformationViewController: UIViewController, UITextViewDelegate{
             }
             if let result = result{
                 print(result)
-                print("ask user whether to update here")
+                print("ask user whether to update here") // if updated update model
+                let controller = UIAlertController()
+                controller.message = "A pin exists for this user.  Do you want to overwrite it?"
+                let overwriteAction = UIAlertAction(title: "OVERWRITE", style: .destructive) { action in
+                    ParseClient.sharedInstance().updateLocation(){(results,error) in
+                        guard error == nil else {
+                            notifyUser(self, message: "Overwrite unsuccessful")
+                            return
+                        }
+                    
+                    // update model
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
+                    }
+                }
+                let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: {action in self.dismiss(animated: true, completion: nil)})
+                controller.addAction(overwriteAction)
+                controller.addAction(cancelAction)
+                self.present(controller, animated: true, completion: nil)
+
             }
                 
                 /*                if false{
@@ -81,14 +94,18 @@ class InformationViewController: UIViewController, UITextViewDelegate{
                         print("Posting error: ",error?.localizedDescription)
                         return
                     }
-                    // use result
+                    // update model and send notification
                     print(result)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
+
+                    
                     
                 })
             }
 
         })
     }
+    
     
     
     @IBAction func findOnMapPressed(_ sender: UIButton) {
