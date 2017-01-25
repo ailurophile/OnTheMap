@@ -71,7 +71,6 @@ class ParseClient: NSObject{
         
         //build parameters array
         let parameterArray = buildParameters()
-        
         queryParse(HTTPMethods.UpdateLocation, parameters: parameterArray ,searchExisting: false , completionHandlerForQuery: {(result, error) in
             guard error == nil else {
                 completionHandler(nil,error)
@@ -100,8 +99,10 @@ class ParseClient: NSObject{
 //        components.queryItems = [URLQueryItem]()
         if method == HTTPMethods.PostLocation || method == HTTPMethods.UpdateLocation {
             if method == HTTPMethods.UpdateLocation{
-                components.path.append(ParseClient.sharedInstance().user.uniqueKey!)
+                components.path.append(ParseClient.sharedInstance().user.objectID!)
             }
+            
+                
             guard let parameters = parameters else{
                 let userInfo = [NSLocalizedDescriptionKey : "No parameters to post!"]
                 completionHandlerForQuery(nil,NSError(domain: "queryParse", code: 1, userInfo: userInfo))
@@ -112,12 +113,14 @@ class ParseClient: NSObject{
                 let postData = try JSONSerialization.data(withJSONObject: parameters as [String: AnyObject])
                 httpBody = postData
                 print(NSString(data: httpBody!, encoding: String.Encoding.utf8.rawValue)!)
-                request = NSMutableURLRequest(url: components.url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
+//                request = NSMutableURLRequest(url: components.url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
                 
             }catch{
                 let userInfo = [NSLocalizedDescriptionKey : "Unable to parse student info as JSON"]
                 completionHandlerForQuery(nil,NSError(domain: "queryParse", code: 1, userInfo: userInfo))
             }
+            
+             request = NSMutableURLRequest(url: components.url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20.0)
             
         }
 

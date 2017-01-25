@@ -13,13 +13,13 @@ import MapKit
 
 class InformationViewController: UIViewController, UITextViewDelegate{
     @IBOutlet weak var locationTextView: UITextView!
-    @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var linkTextView: UITextView!
-    @IBOutlet var linkView: UIView!
-    @IBOutlet var locationView: UIView!
+//    @IBOutlet weak var mapView: MKMapView!
+//    @IBOutlet weak var linkTextView: UITextView!
+//    @IBOutlet var linkView: UIView!
+//    @IBOutlet var locationView: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     var location: String = ""
-    var link: String = ""
+//    var link: String = ""
     
     @IBAction func dismiss(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -27,7 +27,7 @@ class InformationViewController: UIViewController, UITextViewDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         locationTextView.delegate = self
-        linkTextView.delegate = self
+//        linkTextView.delegate = self
         self.activityIndicator.stopAnimating()
     }
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -35,19 +35,19 @@ class InformationViewController: UIViewController, UITextViewDelegate{
         textView.text = ""
     }
     func textViewDidChange(_ textView: UITextView) {
-        if textView == locationTextView{
+//        if textView == locationTextView{
             location = locationTextView.text
-        }
+/*        }
         else {
             link = linkTextView.text
-        }
+        }*/
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("I'm touched!")
         resignFirstResponder()
     }
     //MARK Map functions
-    @IBAction func urlEntered(_ sender: UIButton) {
+/*    @IBAction func urlEntered(_ sender: UIButton) {
         print("url: \(link)")
         ParseClient.sharedInstance().user.link = link
         
@@ -106,7 +106,7 @@ class InformationViewController: UIViewController, UITextViewDelegate{
         })
     }
     
-    
+ */
     
     @IBAction func findOnMapPressed(_ sender: UIButton) {
         print("location: \(location)")
@@ -141,14 +141,16 @@ class InformationViewController: UIViewController, UITextViewDelegate{
                     print("error: \(error)")
                     return
                 }
-                UIView.transition(from: self.locationView, to: self.linkView, duration: 2, options: .layoutSubviews, completion:{(finished) in
+ /*               UIView.transition(from: self.locationView, to: self.linkView, duration: 2, options: .layoutSubviews, completion:{(finished) in
                     while(finished != true) {
                         continue
                     }
                     let annotation = MapViewController.getAnnotation(student: ParseClient.sharedInstance().user)
                     self.mapView.addAnnotation(annotation )})
 
-                
+ */
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "LinkPostingViewController")
+                self.present(viewController!, animated: true, completion: nil)
             })
         }
     }
