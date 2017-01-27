@@ -47,8 +47,18 @@ class ListViewController: UITableViewController {
         cell?.imageView?.image = #imageLiteral(resourceName: "pin")
         return cell!
     }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let app = UIApplication.shared
+        let link = ParseClient.sharedInstance().students[(indexPath as NSIndexPath).row].link
+        if let link = link {            
+            app.open(URL(string: link)!, options: [:], completionHandler: nil)
+        }
+        
+    }
     @objc private func reloadModel(){
-        tableView.reloadData()    
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 
 }

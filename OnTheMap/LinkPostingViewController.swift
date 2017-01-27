@@ -19,9 +19,11 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
 
 
     var link: String = ""
+    var presenter: UIViewController!
     
-    @IBAction func dismiss(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+    @IBAction func dismiss(_ sender: Any) {
+        
+        self.dismiss(animated: true, completion: {self.presenter.dismiss(animated: false, completion: nil)})
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,27 +63,41 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
                 print(results)
                 print("ask user whether to update here") // if updated update model
                 DispatchQueue.main.sync {
-                let controller = UIAlertController()
-                controller.message = "A pin exists for this user.  Do you want to overwrite it?"
-                let overwriteAction = UIAlertAction(title: "OVERWRITE", style: .destructive) { action in
-                    let locationInfo = (result as? AnyObject)?[ParseClient.JSONResponseKeys.Results] as? [[String:AnyObject]]
-//                    guard let objectInfo = locationInfo
-//                    let id = locationInfo?[ParseClient.JSONResponseKeys.ObjectID] as? String
-//                    ParseClient.sharedInstance().user.objectID = id
-                    ParseClient.sharedInstance().updateLocation(){(results,error) in
-                        guard error == nil else {
-                            notifyUser(self, message: "Overwrite unsuccessful")
-                            return
+                    let controller = UIAlertController()
+                    controller.message = "A pin exists for this user.  Do you want to overwrite it?"
+                    let overwriteAction = UIAlertAction(title: "OVERWRITE", style: .destructive) { action in
+                        for object in results {
+                            let id = object[ParseClient.JSONResponseKeys.ObjectID]
+                            print(object)
+                            print("objectID = \(id)")
+                            ParseClient.sharedInstance().user.objectID = id as! String?
                         }
-                        
-                        // update model
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
+
+
+                        ParseClient.sharedInstance().updateLocation(){(results,error) in
+                            guard error == nil else {
+                                notifyUser(self, message: "Overwrite unsuccessful")
+                                return
+                            }
+                            
+                            // update model
+                            for (index, student) in ParseClient.sharedInstance().students.enumerated(){
+                                if student == ParseClient.sharedInstance().user{
+                                    ParseClient.sharedInstance().students.remove(at: index)
+                                    break
+                                }
+                            }
+                            ParseClient.sharedInstance().students.insert(ParseClient.sharedInstance().user, at: 0)
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
+                            DispatchQueue.main.sync {
+                                self.dismiss(self)
+                            }
+                        }
                     }
-                }
-                let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: {action in self.dismiss(animated: true, completion: nil)})
-                controller.addAction(overwriteAction)
-                controller.addAction(cancelAction)
-                self.present(controller, animated: true, completion: nil)
+                    let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: {action in self.dismiss(animated: true, completion: nil)})
+                    controller.addAction(overwriteAction)
+                    controller.addAction(cancelAction)
+                    self.present(controller, animated: true, completion: nil)
                 }
                 
             }

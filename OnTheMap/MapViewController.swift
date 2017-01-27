@@ -11,32 +11,11 @@ import MapKit
 
 class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
-    
+    var annotations = [MKPointAnnotation]()
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         print("INSIDE VIEW WILL LOAD")
         mapView.reloadInputViews()
-/*        if ParseClient.sharedInstance().students == nil{
-            // Do any additional setup after loading the view, typically from a nib.
-            ParseClient.sharedInstance().getLocations(with: { (results,error) in
-                guard error == nil else{
-                    notifyUser(self, message: (error!.localizedDescription))
-                    return
-                }
-                ParseClient.sharedInstance().students = [StudentInformation]()
-                guard results != nil else{
-                    notifyUser(self, message: "No locations found")
-                    return
-                }
-                for item in results!{
-                    let student = StudentInformation(item)
-                    ParseClient.sharedInstance().students.append(student)
-                }
-                
-                
-            })
-        }
- */
     }
 
     override func viewDidLoad() {
@@ -46,12 +25,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // Register for notifications
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadModel), name: NSNotification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(reloadModel), name: NSNotification.Name(ParseClient.Constants.ModelUpdatedNotificationKey)
-        
-        var annotations = [MKPointAnnotation]()
+       
         //Load student information if not already available
         if ParseClient.sharedInstance().students == nil{
-            // Do any additional setup after loading the view, typically from a nib.
             ParseClient.sharedInstance().getLocations(with: { (results,error) in
                 guard error == nil else{
                     notifyUser(self, message: (error!.localizedDescription))
@@ -66,21 +42,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     let student = StudentInformation(item)
                     ParseClient.sharedInstance().students.append(student)
                 }
-/*                print("accessin shared instance")
-                for student in ParseClient.sharedInstance().students{
-                    print(student.firstName as Any)
-                }
- */
+
                 //Create annotations array if it does not yet exist
-                if annotations.count == 0{
-/*                    for student in ParseClient.sharedInstance().students{
-                        let annotation = MapViewController.getAnnotation(student: student)
-                        annotations.append(annotation)
-                        print(student.firstName)
-                        
-                    }
-                    self.mapView.addAnnotations(annotations)
- */
+                if self.annotations.count == 0{
+
                     self.addAnnotationsToMap()
                 }
                 
@@ -129,13 +94,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.shared
             if let toOpen = view.annotation?.subtitle! {
+                
                 app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+                
             }
         }
     }
     
     private func addAnnotationsToMap(){
-        var annotations = [MKPointAnnotation]()
+//        var annotations = [MKPointAnnotation]()
         for student in ParseClient.sharedInstance().students{
             let annotation = MapViewController.getAnnotation(student: student)
             annotations.append(annotation)
@@ -143,7 +110,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         self.mapView.addAnnotations(annotations)
     }
-    
+
     class func getAnnotation(student: StudentInformation)-> MKPointAnnotation{
         let lat = CLLocationDegrees(student.latitude  ?? ParseClient.Constants.DefaultLatitude)
         let long = CLLocationDegrees(student.longitude ?? ParseClient.Constants.DefaultLongitude)
@@ -159,8 +126,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @objc private func reloadModel(){
-        mapView.removeAnnotations(mapView.annotations)
-        addAnnotationsToMap()
+        DispatchQueue.main.async {
+            self.mapView.removeAnnotations(self.mapView.annotations)
+            self.addAnnotationsToMap()
+        }
     }
 
     @IBAction func logout(_ sender: UIBarButtonItem) {

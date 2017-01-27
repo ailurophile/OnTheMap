@@ -149,8 +149,9 @@ class InformationViewController: UIViewController, UITextViewDelegate{
                     self.mapView.addAnnotation(annotation )})
 
  */
-                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "LinkPostingViewController")
-                self.present(viewController!, animated: true, completion: nil)
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "LinkPostingViewController") as! LinkPostingViewController
+                viewController.presenter = self
+                self.present(viewController, animated: true, completion: nil)
             })
         }
     }

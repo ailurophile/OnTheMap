@@ -27,6 +27,7 @@ extension ParseClient {
         static let Encoding = "application/json;charset=utf-8"
         
         static let UNKNOWN = "Unknown"
+        static let NumberOfPinsToLoad = "100"
         static let DefaultLatitude = Float(0.0)
         static let DefaultLongitude = Float(0.0)
         static let ModelUpdatedNotificationKey = "LisaLitchfield.ModelUpdatedNotificationKey"

@@ -72,14 +72,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 */
     @IBAction func loginPressed(){
         if emailTextField.text! != emailTextField.placeholder{
-            print("email text field = \(emailTextField.text) placeholder = \(emailTextField.placeholder)")
+//            print("email text field = \(emailTextField.text) placeholder = \(emailTextField.placeholder)")
             email = emailTextField.text!
         }
 
         if passwordTextField.text! != passwordTextField.placeholder{
             password = passwordTextField.text!
         }
-        print("Login pressed with email: \(email) and password: \(password)")
+//        print("Login pressed with email: \(email) and password: \(password)")
         if(verifyFields() == true){
             //login to Udacity
             UdacityClient.sharedInstance().login(self, email:email, password: password)
