@@ -173,8 +173,8 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="cl3-AT-6OL"/>
                                         <exclude reference="5zM-lv-sEQ"/>
+                                        <exclude reference="cl3-AT-6OL"/>
                                     </mask>
                                 </variation>
                             </mapView>
@@ -224,7 +224,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f31-dQ-DrR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1517.5999999999999" y="-1109.5952023988007"/>
+            <point key="canvasLocation" x="1518" y="-1110"/>
         </scene>
         <!--List View Controller-->
         <scene sceneID="c1o-xg-A6N">
@@ -369,8 +369,17 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="udacity" translatesAutoresizingMaskIntoConstraints="NO" id="8l1-2f-Uul">
-                                <rect key="frame" x="59.5" y="40" width="256" height="256"/>
+                                <rect key="frame" x="60" y="40" width="256" height="256"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2PJ-4h-EA8">
+                                <rect key="frame" x="74" y="555" width="227" height="30"/>
+                                <state key="normal" title="Sign up for Udacity Account here">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="signUpForAccount:" destination="ifW-g8-Qkw" eventType="touchUpInside" id="hCt-fk-jgQ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -385,7 +394,9 @@
                             <constraint firstItem="ZNV-ZV-oEC" firstAttribute="trailing" secondItem="ZGk-dy-fMU" secondAttribute="trailing" id="Vos-VZ-f5f"/>
                             <constraint firstItem="ZNV-ZV-oEC" firstAttribute="top" secondItem="ZGk-dy-fMU" secondAttribute="bottom" constant="18" id="bcC-jt-005"/>
                             <constraint firstItem="078-tp-JnX" firstAttribute="top" secondItem="8l1-2f-Uul" secondAttribute="bottom" constant="8" id="cJ6-dk-fOE"/>
+                            <constraint firstItem="2PJ-4h-EA8" firstAttribute="centerX" secondItem="64c-16-qRY" secondAttribute="centerX" id="hfo-Q3-8Uq"/>
                             <constraint firstItem="ZGk-dy-fMU" firstAttribute="leading" secondItem="64c-16-qRY" secondAttribute="leading" constant="20" id="nuv-aO-wzO"/>
+                            <constraint firstItem="2PJ-4h-EA8" firstAttribute="top" secondItem="wEu-I1-z9f" secondAttribute="bottom" constant="32" id="qGy-d5-Fiz"/>
                             <constraint firstItem="8l1-2f-Uul" firstAttribute="centerX" secondItem="64c-16-qRY" secondAttribute="centerX" id="uzI-Rg-Nxv"/>
                         </constraints>
                     </view>
@@ -397,7 +408,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eW7-w4-eNH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-876" y="712"/>
+            <point key="canvasLocation" x="-879" y="708"/>
         </scene>
     </scenes>
     <resources>

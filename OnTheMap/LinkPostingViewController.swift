@@ -21,6 +21,7 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
     var link: String = ""
     var presenter: UIViewController!
     
+//dismiss both link posting and information posting view controllers to return to tabbed view
     @IBAction func dismiss(_ sender: Any) {
         
         self.dismiss(animated: true, completion: {self.presenter.dismiss(animated: false, completion: nil)})
@@ -31,8 +32,7 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
         let annotation = MapViewController.getAnnotation(student: ParseClient.sharedInstance().user)
         self.mapView.addAnnotation(annotation )
         mapView.centerCoordinate = annotation.coordinate
-//        let rect = MKMapRect(annotation.coordinate)
-//        mapView.mapRectThatFits(<#T##mapRect: MKMapRect##MKMapRect#>)
+
     }
     func textViewDidBeginEditing(_ textView: UITextView) {
         //        locationTextView.text = ""
@@ -44,15 +44,13 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
        
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("I'm touched!")
         resignFirstResponder()
+        view.endEditing(true)
     }
     //MARK Map functions
     @IBAction func urlEntered(_ sender: UIButton) {
-        print("url: \(link)")
+        //update link in model
         ParseClient.sharedInstance().user.link = link
-        
-        
         //Check if pin already exists for user
         ParseClient.sharedInstance().findLocation( _with: {(result,error) in
             guard error == nil else{
@@ -60,63 +58,71 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
                 return
             }
             if let results = result {
-                print(results)
-                print("ask user whether to update here") // if updated update model
-                DispatchQueue.main.sync {
-                    let controller = UIAlertController()
-                    controller.message = "A pin exists for this user.  Do you want to overwrite it?"
-                    let overwriteAction = UIAlertAction(title: "OVERWRITE", style: .destructive) { action in
-                        for object in results {
-                            let id = object[ParseClient.JSONResponseKeys.ObjectID]
-                            print(object)
-                            print("objectID = \(id)")
-                            ParseClient.sharedInstance().user.objectID = id as! String?
+                if results.count == 0{
+        //post location to Parse
+                    ParseClient.sharedInstance().postLocation( with:{ (result, error) in
+                        guard error == nil else{
+                            notifyUser(self, message: "Error posting pin to map")
+                            return
                         }
-
-
-                        ParseClient.sharedInstance().updateLocation(){(results,error) in
-                            guard error == nil else {
-                                notifyUser(self, message: "Overwrite unsuccessful")
-                                return
+        // update model and send notification
+                        ParseClient.sharedInstance().students.insert(ParseClient.sharedInstance().user, at: 0)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
+                        DispatchQueue.main.sync {
+                            self.dismiss(self)
+                        }
+                    })
+                    
+                }
+                else{
+                    DispatchQueue.main.sync {
+                        let controller = UIAlertController()
+                        controller.message = "A pin exists for this user.  Do you want to overwrite it?"
+                        let overwriteAction = UIAlertAction(title: "OVERWRITE", style: .destructive) { action in
+                            for object in results {
+                                let id = object[ParseClient.JSONResponseKeys.ObjectID]
+                                ParseClient.sharedInstance().user.objectID = id as! String?
                             }
-                            
-                            // update model
-                            for (index, student) in ParseClient.sharedInstance().students.enumerated(){
-                                if student == ParseClient.sharedInstance().user{
-                                    ParseClient.sharedInstance().students.remove(at: index)
-                                    break
+
+
+                            ParseClient.sharedInstance().updateLocation(){(results,error) in
+                                guard error == nil else {
+                                    notifyUser(self, message: "Overwrite unsuccessful")
+                                    return
+                                }
+                                
+                                // update model
+                                for (index, student) in ParseClient.sharedInstance().students.enumerated(){
+                                    if student == ParseClient.sharedInstance().user{
+                                        ParseClient.sharedInstance().students.remove(at: index)
+                                        break
+                                    }
+                                }
+                                ParseClient.sharedInstance().students.insert(ParseClient.sharedInstance().user, at: 0)
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
+                                DispatchQueue.main.sync {
+                                    self.dismiss(self)
                                 }
                             }
-                            ParseClient.sharedInstance().students.insert(ParseClient.sharedInstance().user, at: 0)
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
-                            DispatchQueue.main.sync {
-                                self.dismiss(self)
-                            }
                         }
+                        let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: {action in self.dismiss(animated: true, completion: nil)})
+                        controller.addAction(overwriteAction)
+                        controller.addAction(cancelAction)
+                        self.present(controller, animated: true, completion: nil)
                     }
-                    let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: {action in self.dismiss(animated: true, completion: nil)})
-                    controller.addAction(overwriteAction)
-                    controller.addAction(cancelAction)
-                    self.present(controller, animated: true, completion: nil)
                 }
                 
             }
-                
-                /*                if false{
-                 return
-                 }
-                 */
             else {
-                //post location to Parse
-                //                        ParseClient.sharedInstance().postLocation(pin: ParseClient.sharedInstance().user, with:
+            //post location to Parse
+
                 ParseClient.sharedInstance().postLocation( with:{ (result, error) in
                     guard error == nil else{
-                        notifyUser(self, message: "Error posting pin to map")
-                        print("Posting error: ",error?.localizedDescription)
+                        notifyUser(self, message: "Received error: \(error?.localizedDescription)")
                         return
                     }
-                    // update model and send notification
-                    print(result)
+            // update model and send notification
+                    ParseClient.sharedInstance().students.insert(ParseClient.sharedInstance().user, at: 0)
                     NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
                     
                     

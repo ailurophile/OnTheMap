@@ -14,13 +14,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var annotations = [MKPointAnnotation]()
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        print("INSIDE VIEW WILL LOAD")
         mapView.reloadInputViews()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("INSIDE VIEW DID LOAD")
         
         // Register for notifications
         
@@ -46,7 +44,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 //Create annotations array if it does not yet exist
                 if self.annotations.count == 0{
 
-                    self.addAnnotationsToMap()
+                    
+                    DispatchQueue.main.sync {
+                        self.addAnnotationsToMap()
+                        self.mapView.reloadInputViews()
+                    }
                 }
                 
                 
@@ -94,8 +96,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.shared
             if let toOpen = view.annotation?.subtitle! {
-                
-                app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+                guard let url = URL(string: toOpen) else{
+                    let controller = UIAlertController()
+                    controller.message = "Invalid URL string"
+                    let dismissAction = UIAlertAction(title: "OK", style: .default){ action in
+                        controller.dismiss(animated: true, completion: nil)
+                    }
+                    controller.addAction(dismissAction)
+                    present(controller, animated: true, completion: nil)
+                    return
+                }
+                app.open(url, options: [:], completionHandler: nil)
                 
             }
         }
@@ -103,6 +114,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     private func addAnnotationsToMap(){
 //        var annotations = [MKPointAnnotation]()
+        annotations.removeAll()
         for student in ParseClient.sharedInstance().students{
             let annotation = MapViewController.getAnnotation(student: student)
             annotations.append(annotation)
@@ -126,9 +138,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @objc private func reloadModel(){
-        DispatchQueue.main.async {
+        DispatchQueue.main.sync {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.addAnnotationsToMap()
+            self.mapView.reloadInputViews()
         }
     }
 

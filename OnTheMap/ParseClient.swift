@@ -15,7 +15,9 @@ class ParseClient: NSObject{
     
     
     func findLocation(_with completionHandler: @escaping (_ location:[[String: AnyObject]]?,_ error:NSError?)->Void){
-        queryParse(HTTPMethods.GetLocation, parameters: [JSONResponseKeys.UniqueKey: ParseClient.sharedInstance().user.uniqueKey as AnyObject]  , searchExisting: true, completionHandlerForQuery: { (result, error) in
+
+        queryParse(HTTPMethods.GetLocation, parameters: nil  , searchExisting: true, completionHandlerForQuery: { (result, error) in
+
             guard error == nil else{
                 completionHandler(nil,error)
                 return
@@ -25,7 +27,7 @@ class ParseClient: NSObject{
                 completionHandler(nil, NSError(domain: "findLocation", code: 1, userInfo: userInfo))
                 return
             }
-            print("student location: \(studentLocation)")
+//            print("student location: \(studentLocation)")
             completionHandler(studentLocation, nil)
             return
         })
@@ -44,7 +46,6 @@ class ParseClient: NSObject{
                 completionHandler(nil,NSError(domain: "getLocations", code: 1, userInfo: userInfo ))
                 return
             }
-            print(locations)
             completionHandler(locations,nil)
             
         }
@@ -93,15 +94,10 @@ class ParseClient: NSObject{
         components.scheme = Constants.ApiScheme
         components.path = Constants.ApiPath
         
-        print("queryParese PARAMETERS : \(parameters)")
-        
         if method == HTTPMethods.PostLocation || method == HTTPMethods.UpdateLocation {
             if method == HTTPMethods.UpdateLocation{
                 components.path.append("/" + ParseClient.sharedInstance().user.objectID!)
-                print("URL for PUT request: \(components.url)")
             }
-            
-                
             guard let parameters = parameters else{
                 let userInfo = [NSLocalizedDescriptionKey : "No parameters to post!"]
                 completionHandlerForQuery(nil,NSError(domain: "queryParse", code: 1, userInfo: userInfo))
@@ -111,7 +107,7 @@ class ParseClient: NSObject{
             do {
                 let postData = try JSONSerialization.data(withJSONObject: parameters as [String: AnyObject])
                 httpBody = postData
-                print(NSString(data: httpBody!, encoding: String.Encoding.utf8.rawValue)!)
+//                print(NSString(data: httpBody!, encoding: String.Encoding.utf8.rawValue)!)
                 
             } catch {
                 let userInfo = [NSLocalizedDescriptionKey : "Unable to parse student info as JSON"]
@@ -125,8 +121,6 @@ class ParseClient: NSObject{
         else if method == HTTPMethods.GetLocation{
 
             if searchExisting == true {
-                
-
                 var urlString = (components.url?.absoluteString)! + "?where="
                 let prefix = "{\"uniqueKey\":\"".addingPercentEncoding(withAllowedCharacters: .alphanumerics)
                 urlString.append(prefix!)
@@ -158,7 +152,6 @@ class ParseClient: NSObject{
         let session = URLSession.shared
         var task = session.dataTask(with: request as URLRequest) { data, response, error in
             func sendError(_ error: String) {
-                print(error)
                 let userInfo = [NSLocalizedDescriptionKey : error]
                 completionHandlerForQuery(nil, NSError(domain: "makeRequest", code: 1, userInfo: userInfo))
             }
@@ -182,7 +175,7 @@ class ParseClient: NSObject{
                 sendError("No data was returned by the request!")
                 return
             }
-            print(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)
+//            print(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)
 
    
             self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForQuery)

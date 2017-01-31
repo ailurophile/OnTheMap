@@ -85,6 +85,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             UdacityClient.sharedInstance().login(self, email:email, password: password)
         }
     }
+    @IBAction func signUpForAccount(_ sender: Any) {
+        let app = UIApplication.shared
+        app.open(URL(string: UdacityClient.Constants.GetUserAccount)!, options: [:], completionHandler: nil)
+    }
     //MARK: Helper functions
     // Thank you to Jordi Bruin for the validateEmail function from Stack Overflow
     func validateEmail(candidate: String) -> Bool {

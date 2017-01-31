@@ -14,84 +14,75 @@ import Foundation
     func login(_ loginViewController:UIViewController, email: String, password: String){
         // Build URL & configure request
         var url = UdacityURL(path: UdacityClient.Constants.SessionPath)
-        print(url)
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = Methods.Login
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        var body: String = "{\"" + Parameters.Dictionary + "\": {\""
-        body += Parameters.UserName + "\":\""
-        body += email + "\",\""
-        body += Parameters.Password + "\":\""
-        body += password + "\"}}"
-        request.httpBody = body.data(using: String.Encoding.utf8)
-        print(body)
+        let login: [String:String] = [Parameters.UserName:email, Parameters.Password:password]
+        let dictionary = [Parameters.Dictionary: login]
+        do {
+            let postData = try JSONSerialization.data(withJSONObject: dictionary as [String: AnyObject])
+            request.httpBody = postData
+//            print(NSString(data: postData, encoding: String.Encoding.utf8.rawValue)!)
+            
+        } catch {
+            let controller = UIAlertController()
+            controller.message = "Unable to parse data as JSON"
+            let dismissAction = UIAlertAction(title: "Dismiss", style: .default){ action in
+                loginViewController.dismiss(animated: true, completion: nil)
+            }
+            controller.addAction(dismissAction)
+            loginViewController.present(controller, animated: true, completion: nil)
+            return
+        }
+        
         udacityTask(with: request) {(result, error) in
             guard error == nil else {
-                print ("received error: \(error)")
-                // notify user
                 notifyUser(loginViewController, message: "received error: \(error!.localizedDescription)")
                 return
             }
             guard let credentials =  result?[UdacityClient.JSONResponseKeys.Account] as? [String:AnyObject] else{
                 //notify user
-                notifyUser(loginViewController, message: "key: Account not found")
-                print("key: Account not found")
+                notifyUser(loginViewController, message: "Account not found")
                 return
             }
             guard let enrolled = credentials[UdacityClient.JSONResponseKeys.ValidFlag] as? Bool else{
-                //notify user
-                notifyUser(loginViewController, message:"Key: registered not found")
-                print("Key: registered not found")
+                notifyUser(loginViewController, message:"Student not registered")
                 return
             }
-/*            guard let session =  result?[UdacityClient.JSONResponseKeys.Session] as? [String:AnyObject] else{
-                //notify user
-                notifyUser(loginViewController, message: "key: Session not found")
-                print("key: Session not found")
-                return
-            }*/
             guard let id = credentials[UdacityClient.JSONResponseKeys.Key] as? String else {
-                notifyUser(loginViewController, message: "key: key not found")
-                print("key: key not found")
+                notifyUser(loginViewController, message: "key not found")
                 return
             }
             
 
             if enrolled{
-                print("//Login successful so get user info & present map view controller")
+        //Login successful so get user info & present map view controller
                 url = self.UdacityURL(path: UdacityClient.Constants.UserInfoPath+id)
                 ParseClient.sharedInstance().user.uniqueKey = id
-
                 self.getUserInfo(id: id , viewController: loginViewController)
-
-
 //                self.logout()
                 //Present MapViewController on Main
                 DispatchQueue.main.async(execute: {
                     let tabBarController = loginViewController.storyboard?.instantiateViewController(withIdentifier: "TabBarController")
                     loginViewController.present((tabBarController)!, animated: true)
-                    
-                    
                 })
             }
             else{
                //notify user
                 notifyUser(loginViewController, message: "student not enrolled")
-                print("student not enrolled")
             }
         }
     }
     
     func logout(){
-        // Build URL & configure request
+    // Build URL & configure request
         let url = UdacityURL(path: UdacityClient.Constants.SessionPath)
-        print(url)
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = Methods.Logout
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        //Logout of Udacity
+    //Logout of Udacity
         self.udacityTask(with: request, completionHandler: {(logoutResult,logoutError) in
             guard logoutError == nil else{
                 print("Unsuccessful logout from Udacity")
@@ -112,22 +103,18 @@ import Foundation
 
         self.udacityTask(with: request, completionHandler: {(result, error) in
             guard error == nil else {
-                print ("received error: \(error)")
-                // notify user
                 notifyUser(viewController, message: "received error: \(error!.localizedDescription)")
                 return
             }
-            print("account info")
-//            print(result)
+
             guard let userInfo = result?[JSONResponseKeys.User] as? [String: Any] else{
                 notifyUser(viewController, message: "Key: user not found in results")
                 return
             }
             let firstName = userInfo[JSONResponseKeys.FirstName] as? String
             let lastName = userInfo[JSONResponseKeys.LastName] as? String
-            print(firstName,lastName)
             
-            // assign student info to struct for posting pin
+    // assign student info to struct for posting pin
             ParseClient.sharedInstance().user.firstName = firstName
             ParseClient.sharedInstance().user.lastName = lastName
             

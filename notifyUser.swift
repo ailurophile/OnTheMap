@@ -4,7 +4,8 @@
 //
 //  Created by Lisa Litchfield on 12/15/16.
 //  Copyright © 2016 Lisa Litchfield. All rights reserved.
-//
+//  This method is used from within completion handlers to present an alert to the user
+//  on the Main queue.
 
 import Foundation
 import UIKit
