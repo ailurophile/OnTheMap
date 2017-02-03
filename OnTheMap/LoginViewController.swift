@@ -17,17 +17,34 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     var email: String = ""
     var password: String = ""
+    var keyboardPresent = false
+    var viewShift: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
 //        loginButton.isEnabled = false
+        // Register for notifications
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: .UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: .UIKeyboardDidShow, object: nil)
+        
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    //MARK: text field functions
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.text = ""
 //        if (emailTextField.text != "" && passwordTextField == textField) ||
@@ -70,6 +87,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return true
     }
 */
+    //MARK: Login functions
     @IBAction func loginPressed(){
         if emailTextField.text! != emailTextField.placeholder{
 //            print("email text field = \(emailTextField.text) placeholder = \(emailTextField.placeholder)")
@@ -116,6 +134,52 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         
         return true
+    }
+    //MARK: Keyboard functions
+    func keyboardWillHide(_ notification: Notification){
+        if keyboardPresent{
+            self.view.frame.origin.y += getKeyboardHeight(notification)
+        }
+//        keyboardPresent = false
+        
+    }
+    func keyboardWillShow(_ notification: Notification){
+        if !keyboardPresent{
+            self.view.frame.origin.y -= getKeyboardHeight(notification)
+            
+        }
+//        keyboardPresent = true
+        
+    }
+    func keyboardDidHide(_ notification: Notification){
+        keyboardPresent = false
+    
+    }
+    func keyboardDidShow(_ notification: Notification){
+        keyboardPresent = true
+    }
+    func keyboardWillMove(_ notification: Notification){
+        if notification.name == NSNotification.Name.UIKeyboardWillHide {
+            
+            viewShift = 0.0
+            view.frame.origin.y = viewShift
+            
+        }
+        else {
+            
+            let height = getKeyboardHeight(notification)
+            if height != viewShift{
+                viewShift = height
+                view.frame.origin.y = viewShift*(-1.0)
+                
+            }
+        }
+    }
+
+    func getKeyboardHeight(_ notification: Notification) -> CGFloat {
+        let userInfo = (notification as NSNotification).userInfo
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
+        return keyboardSize.cgRectValue.height
     }
     
     

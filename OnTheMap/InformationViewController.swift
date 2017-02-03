@@ -60,7 +60,7 @@ class InformationViewController: UIViewController, UITextViewDelegate{
                 //Use first location returned, if any
                 guard let mapItem = response?.mapItems[0] else{
                     self.activityIndicator.stopAnimating()
-                    notifyUser(self, message: "Location not found!")
+                    sendAlert(self, message: "Location not found!")
                     return
                 }
                 

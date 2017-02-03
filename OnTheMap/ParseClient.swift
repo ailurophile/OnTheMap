@@ -35,7 +35,10 @@ class ParseClient: NSObject{
     }
     
     func getLocations(with completionHandler: @escaping (_ locations:[[String:AnyObject]]?,_ error:NSError?)->Void){
-        queryParse(HTTPMethods.GetLocation, parameters: [JSONParameterKeys.Limit: Constants.NumberOfPinsToLoad as AnyObject], searchExisting: false)  { (results, error) in
+        let parameters = [JSONParameterKeys.Limit: Constants.NumberOfPinsToLoad,
+                          JSONParameterKeys.Order: "-" + JSONResponseKeys.UpdateStamp]
+        queryParse(HTTPMethods.GetLocation, parameters: parameters as [String:AnyObject], searchExisting: false)  { (results, error) in
+
             guard error == nil else{
                 completionHandler(nil,error)
                 return

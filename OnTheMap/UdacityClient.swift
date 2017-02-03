@@ -26,13 +26,8 @@ import Foundation
 //            print(NSString(data: postData, encoding: String.Encoding.utf8.rawValue)!)
             
         } catch {
-            let controller = UIAlertController()
-            controller.message = "Unable to parse data as JSON"
-            let dismissAction = UIAlertAction(title: "Dismiss", style: .default){ action in
-                loginViewController.dismiss(animated: true, completion: nil)
-            }
-            controller.addAction(dismissAction)
-            loginViewController.present(controller, animated: true, completion: nil)
+
+            sendAlert(loginViewController, message: "Unable to parse data as JSON")
             return
         }
         
@@ -132,7 +127,7 @@ import Foundation
                 completionHandler(nil, NSError(domain: "makeRequest", code: 1, userInfo: userInfo))
             }
             if error != nil { // Handle error…
-                sendError("There was an error with your request: \(error)")
+                sendError(" \(error!.localizedDescription)")
                 return
             }
             // GUARD: Did we get a successful 2XX response?
@@ -141,7 +136,12 @@ import Foundation
                 return
             }
             guard  statusCode >= 200 && statusCode <= 299 else {
-                sendError("Your request returned status code: \(HTTPURLResponse.localizedString(forStatusCode:statusCode))")
+                if statusCode == 403{
+                    sendError("Invalid username or password")   //Reviewer didn't like "forbidden" message shown to user
+                }
+                else{
+                    sendError(" \(HTTPURLResponse.localizedString(forStatusCode:statusCode))")
+                }
                 return
             }
             // GUARD: Was there any data returned?

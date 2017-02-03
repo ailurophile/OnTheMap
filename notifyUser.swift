@@ -10,14 +10,21 @@
 import Foundation
 import UIKit
 
+// Method to show user alert from on background queue
 func notifyUser(_ viewController: UIViewController, message:String){
     DispatchQueue.main.sync {
-        let controller = UIAlertController()
-        controller.message = message
-        let dismissAction = UIAlertAction(title: "Dismiss", style: .default){ action in
-            viewController.dismiss(animated: true, completion: nil)
-        }
-        controller.addAction(dismissAction)
-        viewController.present(controller, animated: true, completion: nil)
+        sendAlert(viewController, message: message)
     }
+}
+
+// Method to show user alert from on main queue
+func sendAlert(_ viewController: UIViewController, message:String){
+    
+    let controller = UIAlertController()
+    controller.message = message
+    let dismissAction = UIAlertAction(title: "Dismiss", style: .default){ action in
+    viewController.dismiss(animated: true, completion: nil)
+    }
+    controller.addAction(dismissAction)
+    viewController.present(controller, animated: true, completion: nil)
 }
