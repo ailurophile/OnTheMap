@@ -34,7 +34,7 @@ class ListViewController: UITableViewController {
     }
     //MARK Table delegate functions
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ParseClient.sharedInstance().students.count
+        return StudentInformation.array.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "pinLocation") as UITableViewCell!
@@ -42,14 +42,14 @@ class ListViewController: UITableViewController {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "pinLocation")
         }
         
-        let student = ParseClient.sharedInstance().students[indexPath.row]
+        let student = StudentInformation.array[indexPath.row]
         cell?.textLabel?.text = student.firstName! + " " + (student.lastName)!
         cell?.imageView?.image = #imageLiteral(resourceName: "pin")
         return cell!
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let app = UIApplication.shared
-        let link = ParseClient.sharedInstance().students[(indexPath as NSIndexPath).row].link
+        let link = StudentInformation.array[(indexPath as NSIndexPath).row].link
         if let link = link {            
             app.open(URL(string: link)!, options: [:], completionHandler: nil)
         }

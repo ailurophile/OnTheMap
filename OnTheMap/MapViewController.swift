@@ -25,20 +25,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadModel), name: NSNotification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: nil)
        
         //Load student information if not already available
-        if ParseClient.sharedInstance().students == nil{
+        if StudentInformation.array.count == 0 {
             ParseClient.sharedInstance().getLocations(with: { (results,error) in
                 guard error == nil else{
                     notifyUser(self, message: (error!.localizedDescription))
                     return
                 }
-                ParseClient.sharedInstance().students = [StudentInformation]()
+                StudentInformation.array = [StudentInformation]()
                 guard results != nil else{
                     notifyUser(self, message: "No locations found")
                     return
                 }
                 for item in results!{
                     let student = StudentInformation(item)
-                    ParseClient.sharedInstance().students.append(student)
+                    StudentInformation.array.append(student)
                 }
 
                 //Create annotations array if it does not yet exist
@@ -115,7 +115,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     private func addAnnotationsToMap(){
 //        var annotations = [MKPointAnnotation]()
         annotations.removeAll()
-        for student in ParseClient.sharedInstance().students{
+        for student in StudentInformation.array{
             let annotation = MapViewController.getAnnotation(student: student)
             annotations.append(annotation)
             

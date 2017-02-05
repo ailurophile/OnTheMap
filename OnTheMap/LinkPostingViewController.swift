@@ -29,7 +29,7 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         linkTextView.delegate = self
-        let annotation = MapViewController.getAnnotation(student: ParseClient.sharedInstance().user)
+        let annotation = MapViewController.getAnnotation(student: StudentInformation.user)
         self.mapView.addAnnotation(annotation )
         mapView.centerCoordinate = annotation.coordinate
 
@@ -50,7 +50,7 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
     //MARK Map functions
     @IBAction func urlEntered(_ sender: UIButton) {
         //update link in model
-        ParseClient.sharedInstance().user.link = link
+        StudentInformation.user.link = link
         //Check if pin already exists for user
         ParseClient.sharedInstance().findLocation( _with: {(result,error) in
             guard error == nil else{
@@ -66,7 +66,8 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
                             return
                         }
         // update model and send notification
-                        ParseClient.sharedInstance().students.insert(ParseClient.sharedInstance().user, at: 0)
+//                        ParseClient.sharedInstance().students.insert(ParseClient.sharedInstance().user, at: 0)
+                        StudentInformation.array.insert(StudentInformation.user, at: 0)
                         NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
                         DispatchQueue.main.sync {
                             self.dismiss(self)
@@ -76,12 +77,14 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
                 }
                 else{
                     DispatchQueue.main.sync {
-                        let controller = UIAlertController()
-                        controller.message = "A pin exists for this user.  Do you want to overwrite it?"
+                        let controller = UIAlertController(title: "Alert", message: "A pin exists for this user.  Do you want to overwrite it?", preferredStyle: .alert)
+//                        controller.message = "A pin exists for this user.  Do you want to overwrite it?"
+                        
+                        
                         let overwriteAction = UIAlertAction(title: "OVERWRITE", style: .destructive) { action in
                             for object in results {
                                 let id = object[ParseClient.JSONResponseKeys.ObjectID]
-                                ParseClient.sharedInstance().user.objectID = id as! String?
+                                StudentInformation.user.objectID = id as! String?
                             }
 
 
@@ -92,23 +95,27 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
                                 }
                                 
                                 // update model
-                                for (index, student) in ParseClient.sharedInstance().students.enumerated(){
-                                    if student == ParseClient.sharedInstance().user{
-                                        ParseClient.sharedInstance().students.remove(at: index)
+//                                for (index, student) in ParseClient.sharedInstance().students.enumerated(){
+                                for (index, student) in StudentInformation.array.enumerated(){
+
+                                    if student == StudentInformation.user{
+                                        StudentInformation.array.remove(at: index)
                                         break
                                     }
                                 }
-                                ParseClient.sharedInstance().students.insert(ParseClient.sharedInstance().user, at: 0)
+                                StudentInformation.array.insert(StudentInformation.user, at: 0)
                                 NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
                                 DispatchQueue.main.sync {
                                     self.dismiss(self)
                                 }
                             }
                         }
-                        let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: {action in self.dismiss(animated: true, completion: nil)})
+//                        let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: {action in self.dismiss(animated: true, completion: nil)})
+                        let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: {action in self.dismiss(self)})
                         controller.addAction(overwriteAction)
                         controller.addAction(cancelAction)
                         self.present(controller, animated: true, completion: nil)
+                        
                     }
                 }
                 
@@ -122,7 +129,7 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
                         return
                     }
             // update model and send notification
-                    ParseClient.sharedInstance().students.insert(ParseClient.sharedInstance().user, at: 0)
+                    StudentInformation.array.insert(StudentInformation.user, at: 0)
                     NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
                     
                     

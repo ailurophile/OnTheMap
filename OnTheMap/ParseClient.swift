@@ -10,8 +10,8 @@ import Foundation
 import MapKit
 
 class ParseClient: NSObject{
-    var students: [StudentInformation]!
-    var user = StudentInformation()
+//    var students: [StudentInformation]!
+//    var user = StudentInformation()
     
     
     func findLocation(_with completionHandler: @escaping (_ location:[[String: AnyObject]]?,_ error:NSError?)->Void){
@@ -99,7 +99,7 @@ class ParseClient: NSObject{
         
         if method == HTTPMethods.PostLocation || method == HTTPMethods.UpdateLocation {
             if method == HTTPMethods.UpdateLocation{
-                components.path.append("/" + ParseClient.sharedInstance().user.objectID!)
+                components.path.append("/" + StudentInformation.user.objectID!)
             }
             guard let parameters = parameters else{
                 let userInfo = [NSLocalizedDescriptionKey : "No parameters to post!"]
@@ -127,7 +127,7 @@ class ParseClient: NSObject{
                 var urlString = (components.url?.absoluteString)! + "?where="
                 let prefix = "{\"uniqueKey\":\"".addingPercentEncoding(withAllowedCharacters: .alphanumerics)
                 urlString.append(prefix!)
-                urlString.append(ParseClient.sharedInstance().user.uniqueKey! as String)
+                urlString.append(StudentInformation.user.uniqueKey! as String)
                 let suffix = "\"}".addingPercentEncoding(withAllowedCharacters: .alphanumerics)
                 urlString.append(suffix!)
                 let newUrl = URL(string: urlString)
@@ -194,13 +194,13 @@ class ParseClient: NSObject{
     // MARK: Helpers
     
     func buildParameters()->[String:AnyObject]{
-        let parameterArray = [JSONResponseKeys.FirstName: ParseClient.sharedInstance().user.firstName as AnyObject,
-                              JSONResponseKeys.LastName: ParseClient.sharedInstance().user.lastName as AnyObject,
-                              JSONResponseKeys.UniqueKey: ParseClient.sharedInstance().user.uniqueKey as AnyObject,
-                              JSONResponseKeys.Link: ParseClient.sharedInstance().user.link as AnyObject,
-                              JSONResponseKeys.Location: ParseClient.sharedInstance().user.location as AnyObject,
-                              JSONResponseKeys.Latitude: ParseClient.sharedInstance().user.latitude as AnyObject,
-                              JSONResponseKeys.Longitude: ParseClient.sharedInstance().user.longitude as AnyObject]
+        let parameterArray = [JSONResponseKeys.FirstName: StudentInformation.user.firstName as AnyObject,
+                              JSONResponseKeys.LastName: StudentInformation.user.lastName as AnyObject,
+                              JSONResponseKeys.UniqueKey: StudentInformation.user.uniqueKey as AnyObject,
+                              JSONResponseKeys.Link: StudentInformation.user.link as AnyObject,
+                              JSONResponseKeys.Location: StudentInformation.user.location as AnyObject,
+                              JSONResponseKeys.Latitude: StudentInformation.user.latitude as AnyObject,
+                              JSONResponseKeys.Longitude: StudentInformation.user.longitude as AnyObject]
         return parameterArray
 
     }

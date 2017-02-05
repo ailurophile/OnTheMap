@@ -53,7 +53,7 @@ class InformationViewController: UIViewController, UITextViewDelegate{
             activityIndicator.startAnimating()
             let request = MKLocalSearchRequest()
             request.naturalLanguageQuery = location
-            ParseClient.sharedInstance().user.location = location
+            StudentInformation.user.location = location
             let search = MKLocalSearch(request: request)
             search.start(completionHandler: {(response, error) in
 //                print(response as Any)
@@ -66,8 +66,8 @@ class InformationViewController: UIViewController, UITextViewDelegate{
                 
                 //Update user coordinates in data model
 
-                ParseClient.sharedInstance().user.longitude = Float(mapItem.placemark.coordinate.longitude)
-                ParseClient.sharedInstance().user.latitude = Float(mapItem.placemark.coordinate.latitude)
+                StudentInformation.user.longitude = Float(mapItem.placemark.coordinate.longitude)
+                StudentInformation.user.latitude = Float(mapItem.placemark.coordinate.latitude)
 //                print("mapItem = \(mapItem)")
                 self.activityIndicator.stopAnimating()
                 if (error != nil){

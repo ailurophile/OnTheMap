@@ -54,7 +54,7 @@ import Foundation
             if enrolled{
         //Login successful so get user info & present map view controller
                 url = self.UdacityURL(path: UdacityClient.Constants.UserInfoPath+id)
-                ParseClient.sharedInstance().user.uniqueKey = id
+                StudentInformation.user.uniqueKey = id
                 self.getUserInfo(id: id , viewController: loginViewController)
 //                self.logout()
                 //Present MapViewController on Main
@@ -110,8 +110,8 @@ import Foundation
             let lastName = userInfo[JSONResponseKeys.LastName] as? String
             
     // assign student info to struct for posting pin
-            ParseClient.sharedInstance().user.firstName = firstName
-            ParseClient.sharedInstance().user.lastName = lastName
+            StudentInformation.user.firstName = firstName
+            StudentInformation.user.lastName = lastName
             
         })
 

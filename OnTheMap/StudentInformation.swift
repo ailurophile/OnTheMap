@@ -20,6 +20,8 @@ struct  StudentInformation {
     var link : String?
     var objectID : String?
     var uniqueKey : String?
+    static var array =  [StudentInformation]()
+    static var user = StudentInformation()
     
     //Mark Construction
     
