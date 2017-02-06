@@ -95,7 +95,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.shared
-            if let toOpen = view.annotation?.subtitle! {
+            if var toOpen = view.annotation?.subtitle! {
+                toOpen = toOpen.replacingOccurrences(of: "\n", with: "")  //remove unwanted carriage return
                 guard let url = URL(string: toOpen) else{
                     let controller = UIAlertController()
                     controller.message = "Invalid URL string"
