@@ -95,7 +95,6 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
                                 }
                                 
                                 // update model
-//                                for (index, student) in ParseClient.sharedInstance().students.enumerated(){
                                 for (index, student) in StudentInformation.array.enumerated(){
 
                                     if student == StudentInformation.user{
@@ -110,7 +109,6 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
                                 }
                             }
                         }
-//                        let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: {action in self.dismiss(animated: true, completion: nil)})
                         let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: {action in self.dismiss(self)})
                         controller.addAction(overwriteAction)
                         controller.addAction(cancelAction)
@@ -131,9 +129,6 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
             // update model and send notification
                     StudentInformation.array.insert(StudentInformation.user, at: 0)
                     NotificationCenter.default.post(name: Notification.Name(rawValue: ParseClient.Constants.ModelUpdatedNotificationKey), object: self)
-                    
-                    
-                    
                 })
             }
             

@@ -34,8 +34,6 @@ class InformationViewController: UIViewController, UITextViewDelegate{
         resignFirstResponder()
         view.endEditing(true)
     }
-
-    
     @IBAction func findOnMapPressed(_ sender: UIButton) {
         // Verify user entered location string
         if location == "" {
@@ -49,14 +47,13 @@ class InformationViewController: UIViewController, UITextViewDelegate{
 
         }
         else{
-            //Forward geocode location
+        //Forward geocode location
             activityIndicator.startAnimating()
             let request = MKLocalSearchRequest()
             request.naturalLanguageQuery = location
             StudentInformation.user.location = location
             let search = MKLocalSearch(request: request)
             search.start(completionHandler: {(response, error) in
-//                print(response as Any)
                 //Use first location returned, if any
                 guard let mapItem = response?.mapItems[0] else{
                     self.activityIndicator.stopAnimating()
@@ -64,17 +61,16 @@ class InformationViewController: UIViewController, UITextViewDelegate{
                     return
                 }
                 
-                //Update user coordinates in data model
+        //Update user coordinates in data model
 
                 StudentInformation.user.longitude = Float(mapItem.placemark.coordinate.longitude)
                 StudentInformation.user.latitude = Float(mapItem.placemark.coordinate.latitude)
-//                print("mapItem = \(mapItem)")
                 self.activityIndicator.stopAnimating()
                 if (error != nil){
                     notifyUser(self, message: "There was an error with your request.")
                     return
                 }
-                //Present second view controller to show location and request url
+        //Present second view controller to show location and request url
 
                 let viewController = self.storyboard?.instantiateViewController(withIdentifier: "LinkPostingViewController") as! LinkPostingViewController
                 viewController.presenter = self

@@ -37,69 +37,30 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(self)
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     //MARK: text field functions
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.text = ""
-//        if (emailTextField.text != "" && passwordTextField == textField) ||
-//            (passwordTextField.text != "" && emailTextField == textField){
-//            loginButton.isEnabled = true
-//        }
     }
-/*    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
-        if textField == emailTextField{
-            email = emailTextField.text!
-        }
-        else{
-            password = passwordTextField.text!
-        }
-    } 
- */
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-/*       if textField == emailTextField{
-            email = emailTextField.text!
-        }
-        else{
-            password = passwordTextField.text!
-        }
-//        if emailTextField.text != "" && passwordTextField.text != ""{
-//            loginButton.isEnabled = true
-//        }*/
         textField.resignFirstResponder()
         return true
     }
-/*    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if textField == emailTextField{
-            email = emailTextField.text!
-        }
-        else{
-            password = passwordTextField.text!
-        }
-        if email != "" && password != ""{
-            loginButton.isEnabled = true
-        }
-        return true
-    }
-*/
+
     //MARK: Login functions
     @IBAction func loginPressed(){
         if emailTextField.text! != emailTextField.placeholder{
-//            print("email text field = \(emailTextField.text) placeholder = \(emailTextField.placeholder)")
             email = emailTextField.text!
         }
 
         if passwordTextField.text! != passwordTextField.placeholder{
             password = passwordTextField.text!
         }
-//        print("Login pressed with email: \(email) and password: \(password)")
         if(verifyFields() == true){
-            //login to Udacity
+    //login to Udacity
             UdacityClient.sharedInstance().login(self, email:email, password: password)
         }
     }
@@ -140,16 +101,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if keyboardPresent{
             self.view.frame.origin.y += getKeyboardHeight(notification)
         }
-//        keyboardPresent = false
-        
     }
     func keyboardWillShow(_ notification: Notification){
         if !keyboardPresent{
             self.view.frame.origin.y -= getKeyboardHeight(notification)
             
         }
-//        keyboardPresent = true
-        
     }
     func keyboardDidHide(_ notification: Notification){
         keyboardPresent = false
@@ -160,10 +117,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     func keyboardWillMove(_ notification: Notification){
         if notification.name == NSNotification.Name.UIKeyboardWillHide {
-            
             viewShift = 0.0
             view.frame.origin.y = viewShift
-            
         }
         else {
             

@@ -50,8 +50,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         self.mapView.reloadInputViews()
                     }
                 }
-                
-                
             })
         }
 
@@ -64,9 +62,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     // MARK: - MKMapViewDelegate
     
-    // Here we create a view with a "right callout accessory view". You might choose to look into other
-    // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
-    // method in TableViewDataSource.
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         let reuseId = "pin"
@@ -114,7 +109,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     private func addAnnotationsToMap(){
-//        var annotations = [MKPointAnnotation]()
+
         annotations.removeAll()
         for student in StudentInformation.array{
             let annotation = MapViewController.getAnnotation(student: student)
@@ -150,11 +145,5 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         UdacityClient.sharedInstance().logout()
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
 }
 
