@@ -35,7 +35,7 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
 
     }
     func textViewDidBeginEditing(_ textView: UITextView) {
-        //        locationTextView.text = ""
+
         textView.text = ""
     }
     func textViewDidChange(_ textView: UITextView) {
@@ -123,7 +123,7 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
 
                 ParseClient.sharedInstance().postLocation( with:{ (result, error) in
                     guard error == nil else{
-                        notifyUser(self, message: "Received error: \(error?.localizedDescription)")
+                        notifyUser(self, message: (error!.localizedDescription))
                         return
                     }
             // update model and send notification

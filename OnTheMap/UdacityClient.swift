@@ -56,12 +56,12 @@ import Foundation
                 url = self.UdacityURL(path: UdacityClient.Constants.UserInfoPath+id)
                 StudentInformation.user.uniqueKey = id
                 self.getUserInfo(id: id , viewController: loginViewController)
-//                self.logout()
-                //Present MapViewController on Main
+        //Present MapViewController on Main
                 DispatchQueue.main.async(execute: {
                     let tabBarController = loginViewController.storyboard?.instantiateViewController(withIdentifier: "TabBarController")
                     loginViewController.present((tabBarController)!, animated: true)
-                })
+                    })
+                
             }
             else{
                //notify user
@@ -98,7 +98,23 @@ import Foundation
 
         self.udacityTask(with: request, completionHandler: {(result, error) in
             guard error == nil else {
-                notifyUser(viewController, message: "received error: \(error!.localizedDescription)")
+            // retry one time rather than notifying user as they are unable to take useful action
+                self.udacityTask(with: request, completionHandler: {(result, error) in
+                    guard error == nil else {
+                        return
+                    }
+                    guard let userInfo = result?[JSONResponseKeys.User] as? [String: Any] else{
+                        return
+                    }
+                    let firstName = userInfo[JSONResponseKeys.FirstName] as? String
+                    let lastName = userInfo[JSONResponseKeys.LastName] as? String
+                    
+                // assign student info to struct for posting pin
+                    StudentInformation.user.firstName = firstName
+                    StudentInformation.user.lastName = lastName
+                    return
+                })
+
                 return
             }
 
@@ -122,7 +138,6 @@ import Foundation
         let session = URLSession.shared
         var task = session.dataTask(with: request as URLRequest) { data, response, error in
             func sendError(_ error: String) {
-                print(error)
                 let userInfo = [NSLocalizedDescriptionKey : error]
                 completionHandler(nil, NSError(domain: "makeRequest", code: 1, userInfo: userInfo))
             }
@@ -149,11 +164,7 @@ import Foundation
                 sendError("No data was returned by the request!")
                 return
             }
-            let newData = self.getValidData(data)
-            
-
-            //    print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
-            
+            let newData = self.getValidData(data)            
 //            print(NSString(data: newData, encoding: String.Encoding.utf8.rawValue)!)
             self.convertDataWithCompletionHandler(newData!, completionHandlerForConvertData: completionHandler)
        

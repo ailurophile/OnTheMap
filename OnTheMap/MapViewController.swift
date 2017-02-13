@@ -91,18 +91,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.shared
             if var toOpen = view.annotation?.subtitle! {
-                toOpen = toOpen.replacingOccurrences(of: "\n", with: "")  //remove unwanted carriage return
+                toOpen = toOpen.replacingOccurrences(of: "\n", with: "")  //remove unwanted carriage returns
                 guard let url = URL(string: toOpen) else{
-                    let controller = UIAlertController()
-                    controller.message = "Invalid URL string"
-                    let dismissAction = UIAlertAction(title: "OK", style: .default){ action in
-                        controller.dismiss(animated: true, completion: nil)
-                    }
-                    controller.addAction(dismissAction)
-                    present(controller, animated: true, completion: nil)
+
+                    sendAlert(self, message: "Invalid URL string")
                     return
                 }
-                app.open(url, options: [:], completionHandler: nil)
+                app.open(url, options: [:], completionHandler:{(success) in
+                    if success == false{
+                        sendAlert(self, message: "Unable to open URL")
+                    }
+                })
                 
             }
         }

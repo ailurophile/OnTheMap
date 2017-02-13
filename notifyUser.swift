@@ -23,7 +23,7 @@ func sendAlert(_ viewController: UIViewController, message:String){
     let controller = UIAlertController()
     controller.message = message
     let dismissAction = UIAlertAction(title: "Dismiss", style: .default){ action in
-    viewController.dismiss(animated: true, completion: nil)
+    controller.dismiss(animated: true, completion: nil)
     }
     controller.addAction(dismissAction)
     viewController.present(controller, animated: true, completion: nil)

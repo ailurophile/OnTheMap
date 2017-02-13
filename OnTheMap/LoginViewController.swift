@@ -84,13 +84,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
 
         if errorString != "" {
-            let controller = UIAlertController()
-            controller.message = errorString
-            let dismissAction = UIAlertAction(title: "Dismiss", style: .default){ action in
-                self.dismiss(animated: true, completion: nil)
-                }
-            controller.addAction(dismissAction)
-            present(controller, animated: true, completion: nil)
+            sendAlert(self, message: errorString)
             return false
         }
         

@@ -24,6 +24,16 @@ class InformationViewController: UIViewController, UITextViewDelegate{
         locationTextView.delegate = self
         self.activityIndicator.stopAnimating()
     }
+// allow carriage return to dismiss keyboard so user can access "Find on Map" button
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n"{
+            textView.resignFirstResponder()
+            return false
+        }
+        else {
+            return true
+        }
+    }
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.text = ""
     }
@@ -37,13 +47,8 @@ class InformationViewController: UIViewController, UITextViewDelegate{
     @IBAction func findOnMapPressed(_ sender: UIButton) {
         // Verify user entered location string
         if location == "" {
-            let controller = UIAlertController()
-            controller.message = "Please enter location i.e. Cupertino, CA"
-            let dismissAction = UIAlertAction(title: "Dismiss", style: .default){ action in
-                self.dismiss(animated: true, completion: nil)
-            }
-            controller.addAction(dismissAction)
-            present(controller, animated: true, completion: nil)
+
+            sendAlert(self, message: "Please enter location i.e. Cupertino, CA")
 
         }
         else{
