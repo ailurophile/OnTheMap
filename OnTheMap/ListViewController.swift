@@ -49,9 +49,14 @@ class ListViewController: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let app = UIApplication.shared
+        tableView.deselectRow(at: indexPath, animated: true)
         let link = StudentInformation.array[(indexPath as NSIndexPath).row].link
         if let link = link {            
-            app.open(URL(string: link)!, options: [:], completionHandler: nil)
+            app.open(URL(string: link)!, options: [:], completionHandler:{(success) in
+                if success == false{
+                    sendAlert(self, message: "Unable to open URL")
+                }
+            })
         }
         
     }

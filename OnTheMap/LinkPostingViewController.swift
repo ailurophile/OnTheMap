@@ -31,7 +31,10 @@ class LinkPostingViewController: UIViewController, UITextViewDelegate{
         linkTextView.delegate = self
         let annotation = MapViewController.getAnnotation(student: StudentInformation.user)
         self.mapView.addAnnotation(annotation )
-        mapView.centerCoordinate = annotation.coordinate
+//        mapView.centerCoordinate = annotation.coordinate
+        let span = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
+        let region = MKCoordinateRegion(center: annotation.coordinate, span: span)
+        mapView.setRegion(region, animated: true)
 
     }
     func textViewDidBeginEditing(_ textView: UITextView) {

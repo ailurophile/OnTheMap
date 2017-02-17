@@ -11,7 +11,7 @@ import Foundation
 
  class UdacityClient: NSObject{
     
-    func login(_ loginViewController:UIViewController, email: String, password: String){
+    func login(_ loginViewController:UIViewController, email: String, password: String, completionHandler: @escaping (Bool)->()){
         // Build URL & configure request
         var url = UdacityURL(path: UdacityClient.Constants.SessionPath)
         let request = NSMutableURLRequest(url: url)
@@ -49,24 +49,16 @@ import Foundation
                 notifyUser(loginViewController, message: "key not found")
                 return
             }
-            
-
             if enrolled{
-        //Login successful so get user info & present map view controller
+                //Login successful so get user info
                 url = self.UdacityURL(path: UdacityClient.Constants.UserInfoPath+id)
                 StudentInformation.user.uniqueKey = id
                 self.getUserInfo(id: id , viewController: loginViewController)
-        //Present MapViewController on Main
-                DispatchQueue.main.async(execute: {
-                    let tabBarController = loginViewController.storyboard?.instantiateViewController(withIdentifier: "TabBarController")
-                    loginViewController.present((tabBarController)!, animated: true)
-                    })
-                
+
             }
-            else{
-               //notify user
-                notifyUser(loginViewController, message: "student not enrolled")
-            }
+            
+            completionHandler(enrolled)
+        
         }
     }
     

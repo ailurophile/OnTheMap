@@ -14,15 +14,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+
     
     var email: String = ""
     var password: String = ""
     var keyboardPresent = false
     var viewShift: CGFloat = 0.0
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(animated)
+        self.activityIndicator.stopAnimating()
+
+
 //        loginButton.isEnabled = false
         // Register for notifications
         
@@ -60,8 +65,24 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             password = passwordTextField.text!
         }
         if(verifyFields() == true){
+            activityIndicator.startAnimating()
     //login to Udacity
-            UdacityClient.sharedInstance().login(self, email:email, password: password)
+            UdacityClient.sharedInstance().login(self, email:email, password: password){(enrolled) in
+                self.activityIndicator.stopAnimating()
+                if enrolled == true {
+                    //Login successful so present map view controller
+                    //Present MapViewController on Main
+                    DispatchQueue.main.async(execute: {
+                        let tabBarController = self.storyboard?.instantiateViewController(withIdentifier: "TabBarController")
+                        self.present((tabBarController)!, animated: true)
+                    })
+                    
+                }
+                else{
+                    //notify user
+                    notifyUser(self, message: "student not enrolled")
+                }
+            }
         }
     }
     @IBAction func signUpForAccount(_ sender: Any) {
@@ -91,17 +112,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     //MARK: Keyboard functions
-    func keyboardWillHide(_ notification: Notification){
-        if keyboardPresent{
-            self.view.frame.origin.y += getKeyboardHeight(notification)
-        }
-    }
-    func keyboardWillShow(_ notification: Notification){
-        if !keyboardPresent{
-            self.view.frame.origin.y -= getKeyboardHeight(notification)
-            
-        }
-    }
+
     func keyboardDidHide(_ notification: Notification){
         keyboardPresent = false
     

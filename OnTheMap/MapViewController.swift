@@ -52,6 +52,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 }
             })
         }
+        else {
+            addAnnotationsToMap()
+            mapView.reloadInputViews()
+        }
 
     }
     
