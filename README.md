@@ -1,1 +1,19 @@
-The OnTheMap App was developed as part of the Udacity iOSDeveloper nanodegree program.  It authenticates users by having them log in to their Udacity accounts then takes them to a tab view which shows user pin locations on a map as well as in a list.  If the user has no Udacity account, a link on the login screen will take them to the Udacity site where they can create one.  Each user can provide a unique link along with their location (entered as a text string & geocoded by the app) to be added to the map.  Tapping on a user's pin on the map or their entry in the table will bring up a detail view containing the link they provided and tapping the link will open the link in Safari.  If the user tries to add a pin but already has one in the system, they will be asked whether to overwrite it or to cancel.
+# OnTheMap
+
+The OnTheMap App was developed as part of the Udacity iOSDeveloper nanodegree program to allow users to share their locations and a link of their choosing with other users of the app. 
+
+## Features
+
+* authenticates users by having them log in to their Udacity accounts
+* provides a link on login screen to sign up for Udacity Account
+* presents a tabbed view showing user locations as pins on a map, and next to names in a table
+* tapping a pin on the map or in the table opens a detail view showing the URL of the link provided by the selected user
+* tapping a link will open it in Safari if it is a valid URL or notify the user if not
+* allows user to describe their location with a text string which will be geocoded by the app and shown on a map
+* allows user to provide a link (this should be a valid URL) to associate with their pin
+* if a user with an existing pin attempts to create a new pin they are asked whether to overwrite it or cancel
+
+
+
+
+
